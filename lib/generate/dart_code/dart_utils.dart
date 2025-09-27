@@ -74,7 +74,7 @@ String stripIllegal(String name, {bool firstCharCapital = false}) {
     "void",
     "while",
     "with",
-    "yield"
+    "yield",
   ];
   if (keywords.contains(name.toLowerCase())) {
     name = "${name}_";

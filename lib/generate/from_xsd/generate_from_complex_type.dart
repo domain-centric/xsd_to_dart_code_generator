@@ -6,8 +6,8 @@ import 'package:xsd_to_dart_code_generator/generate/dart_code/post_process.dart'
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 
-List<CodeModel> generateComplexTypes(XsdDocument xsdDocument) {
-  final complexTypes = xsdDocument.document.findAllElements(
+List<CodeModel> generateComplexTypes(Schema schema) {
+  final complexTypes = schema.findAllElements(
     'complexType',
     namespace: xsdNamespaceUri,
   );
@@ -15,7 +15,7 @@ List<CodeModel> generateComplexTypes(XsdDocument xsdDocument) {
   final typeDefinitions = <CodeModel>[];
 
   for (final complexType in complexTypes) {
-    var typeDefinition = generate(xsdDocument.schema, complexType);
+    var typeDefinition = generate(schema, complexType);
     if (typeDefinition != null) {
       typeDefinitions.add(typeDefinition);
     }
@@ -24,7 +24,7 @@ List<CodeModel> generateComplexTypes(XsdDocument xsdDocument) {
   return typeDefinitions;
 }
 
-CodeModel? generate(XsdSchema schema, XmlElement complexType) {
+CodeModel? generate(Schema schema, XmlElement complexType) {
   String typeName;
   try {
     typeName = findTypeName(complexType);
@@ -60,7 +60,7 @@ bool _isAbstract(XmlElement complexType) =>
     complexType.getAttribute('abstract') == 'true';
 
 Type? findSuperClass({
-  required XsdSchema schema,
+  required Schema schema,
   required XmlElement complexType,
 }) {
   var complexContent = complexType
@@ -91,7 +91,7 @@ class TypeWithXsdNameSpaceUri extends Type implements PostProcess {
   });
 }
 
-String? findTypeNamespaceUri(XsdSchema schema, String base) {
+String? findTypeNamespaceUri(Schema schema, String base) {
   var baseValues = base.split(':');
   var nameSpacePrefix = baseValues.length == 2 ? baseValues.first : null;
   if (nameSpacePrefix != null) {
@@ -99,8 +99,5 @@ String? findTypeNamespaceUri(XsdSchema schema, String base) {
   }
   return null;
 }
-
-
-
 
 ///FIXME: xsd:group!!!!

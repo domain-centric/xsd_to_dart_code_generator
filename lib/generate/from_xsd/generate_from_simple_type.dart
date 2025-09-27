@@ -5,8 +5,8 @@ import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_g
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 
-List<CodeModel> generateSimpleTypes(XsdDocument xsdDocument) {
-  final simpleTypes = xsdDocument.document.findAllElements(
+List<CodeModel> generateSimpleTypes(Schema schema) {
+  final simpleTypes = schema.findAllElements(
     'simpleType',
     namespace: xsdNamespaceUri,
   );

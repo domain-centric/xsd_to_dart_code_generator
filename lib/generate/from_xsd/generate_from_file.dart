@@ -24,11 +24,11 @@ import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 
 Library2? generateFromFile(File xsdFile) {
   try {
-    var xsdDocument = XsdDocument(xsdFile);
+    var schema = Schema.fromFile(xsdFile);
 
     var typeDeclarations = <CodeModel>[];
-    typeDeclarations.addAll(generateComplexTypes(xsdDocument));
-    typeDeclarations.addAll(generateSimpleTypes(xsdDocument));
+    typeDeclarations.addAll(generateComplexTypes(schema));
+    typeDeclarations.addAll(generateSimpleTypes(schema));
 
     return Library2(
       classes: typeDeclarations.whereType<Class>().toList(),
@@ -43,28 +43,15 @@ Library2? generateFromFile(File xsdFile) {
 
 const xsdNamespaceUri = 'http://www.w3.org/2001/XMLSchema';
 
-//TODO replace by XsdSchema (that is a XmlElement if possible)
-class XsdDocument extends XmlDocument {
-  final File xsdFile;
-  final XmlDocument document;
-  final XsdSchema schema;
-
-  XsdDocument._(this.xsdFile, this.document, this.schema);
-
-  factory XsdDocument(File xsdFile) {
+/// represents a [Xml Schema Definition](https://en.wikipedia.org/wiki/XML_Schema_(W3C))
+class Schema extends XmlElement {
+  factory Schema.fromFile(File xsdFile) {
     var xmlString = xsdFile.readAsStringSync();
     var document = XmlDocument.parse(xmlString);
-    var schema = XsdSchema(document);
-    return XsdDocument._(xsdFile, document, schema);
+    return Schema(document);
   }
-}
 
-class XsdSchema {
-  final XmlElement element;
-
-  XsdSchema._(this.element);
-
-  factory XsdSchema(XmlDocument xsdDocument) {
+  factory Schema(XmlDocument xsdDocument) {
     XmlElement? element = xsdDocument
         .findElements("schema", namespace: xsdNamespaceUri)
         .firstOrNull;
@@ -72,11 +59,18 @@ class XsdSchema {
     if (element == null) {
       throw ArgumentError("No schema element found in XSD document");
     }
-    return XsdSchema._(element);
+    return Schema.fromElement(element);
   }
 
+  Schema.fromElement(XmlElement schema)
+    : super(
+        schema.name.copy(),
+        List<XmlAttribute>.from(schema.attributes.map((a) => a.copy())),
+        List<XmlNode>.from(schema.children.map((c) => c.copy())),
+        schema.isSelfClosing,
+      );
+
   String? findNameSpaceUri(String nameSpacePrefixToFind) {
-    var attributes = element.attributes;
     for (var attribute in attributes) {
       if (attribute.name.prefix == 'xmlns' &&
           attribute.name.local == nameSpacePrefixToFind) {

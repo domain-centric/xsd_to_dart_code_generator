@@ -8,7 +8,7 @@ import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 
 List<Field> generateFieldsFromXsdElement({
-  required XsdSchema schema,
+  required Schema schema,
   required String typeName,
   required XmlElement complexType,
 }) {
@@ -27,7 +27,6 @@ List<Field> generateFieldsFromXsdElement({
     if (isList) {
       name = name ?? 'items';
 
-      ; //TODO add element types here
       var genericType = XsdChoiceType(
         '${typeName}Item',
         elementsThatImplementThisType,
@@ -100,7 +99,7 @@ XmlElement? findNestedElement(XmlElement element) {
   return null;
 }
 
-Field? convertToField(XsdSchema schema, XmlElement xsd) {
+Field? convertToField(Schema schema, XmlElement xsd) {
   var xmlName = xsd.getAttribute("name")!;
   String fieldName = toValidDartNameStartingWitLowerCase(xmlName);
   var type = createTypeForElement(schema, xsd);
@@ -160,7 +159,7 @@ class XsdAttributeField extends Field {
   });
 }
 
-Type? createTypeForElement(XsdSchema schema, XmlElement xsd) {
+Type? createTypeForElement(Schema schema, XmlElement xsd) {
   Type? type;
   type = createFromTypeAttribute(schema, xsd);
   if (type != null) {
@@ -190,7 +189,7 @@ class XsdReferenceType extends Type implements PostProcess {
   });
 }
 
-Type? createFromTypeAttribute(XsdSchema schema, XmlElement xsd) {
+Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
   var typeAttribute = xsd.getAttribute("type");
 
   if (typeAttribute == null) {
@@ -228,7 +227,7 @@ Type? createFromTypeAttribute(XsdSchema schema, XmlElement xsd) {
   }
 }
 
-Type? createFromNameAttribute(XsdSchema schema, XmlElement xsd) {
+Type? createFromNameAttribute(Schema schema, XmlElement xsd) {
   var name = xsd.getAttribute("name");
   if (name == null) {
     return null;
@@ -260,46 +259,13 @@ bool _isNullable(XmlElement element) {
       element.getAttribute("use") == "optional";
 }
 
-// CAN WE DO WITHOUT???
-
-// String findXsdNamespacePrefix(XmlElement schema) {
-//   var schemaAttributes = schema.attributes;
-//   for (var attr in schemaAttributes) {
-//     if (attr.name.qualified.startsWith('xmlns:') &&
-//         attr.value == 'http://www.w3.org/2001/XMLSchema') {
-//       return attr.name.qualified.split(':').last;
-//     }
-//   }
-//   return '';
-// }
-
-// String findNamespaceUri(XmlElement schema, String namespacePrefix) {
-//   var schemaAttributes = schema.attributes;
-//   for (var attr in schemaAttributes) {
-//     if (attr.name.qualified.endsWith(':$namespacePrefix')) {
-//       return attr.value;
-//     }
-//   }
-//   return '';
-// }
-
-// XmlElement findSchemaElement(XmlElement element) {
-//   var parent = element.parentElement;
-//   if (parent == null) {
-//     return element;
-//   } else {
-//     return findSchemaElement(parent);
-//   }
-// }
-
-/// TODO needs to create an abstract class of this type and all [elementsThatImplementThisType] must implement it
 class XsdChoiceType extends Type implements PostProcess {
   final List<XmlElement> elementsThatImplementThisType;
   XsdChoiceType(super.name, this.elementsThatImplementThisType);
 }
 
 /// finds within [parent] all xds.elements, including xsd.group references
-List<XmlElement> findElements(XsdSchema schema, XmlElement parent) {
+List<XmlElement> findElements(Schema schema, XmlElement parent) {
   var elements = parent
       .findElements('element', namespace: xsdNamespaceUri)
       .toList();
@@ -313,7 +279,7 @@ List<XmlElement> findElements(XsdSchema schema, XmlElement parent) {
       continue;
     }
     var groupNameToFind = ref.split(':').last;
-    var foundReferredGroups = schema.element
+    var foundReferredGroups = schema
         .findAllElements('group', namespace: xsdNamespaceUri)
         .where((g) => g.getAttribute('name') == groupNameToFind);
     if (foundReferredGroups.length != 1) {
@@ -337,7 +303,7 @@ List<XmlElement> findElements(XsdSchema schema, XmlElement parent) {
 }
 
 /// finds within [parent] all xsd:attribute elements, including xsd:attributeGroup references
-findAttributes(XsdSchema schema, XmlElement parent) {
+findAttributes(Schema schema, XmlElement parent) {
   var attributes = parent
       .findElements("attribute", namespace: xsdNamespaceUri)
       .toList();
@@ -351,7 +317,7 @@ findAttributes(XsdSchema schema, XmlElement parent) {
       continue;
     }
     var groupNameToFind = ref.split(':').last;
-    var foundReferredGroups = schema.element
+    var foundReferredGroups = schema
         .findAllElements('group')
         .where((g) => g.name.local == groupNameToFind);
     if (foundReferredGroups.length != 1) {
