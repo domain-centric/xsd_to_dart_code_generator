@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:ppx="www.iec.ch/public/TC65SC65BWG7TF10" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" targetNamespace="www.iec.ch/public/TC65SC65BWG7TF10" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+  <!--Main schema element “Project”-->
+  <xsd:element name="Project">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="FileHeader">
+          <xsd:complexType>
+            <xsd:attribute name="companyName" type="xsd:string" use="required"/>
+            <xsd:attribute name="productName" type="xsd:string" use="required"/>
+            <xsd:attribute name="productVersion" type="xsd:string" use="required"/>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="ContentHeader">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="AddDataInfo" minOccurs="0">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="Info" minOccurs="0" maxOccurs="unbounded">
+                      <xsd:complexType>
+                        <xsd:attribute name="name" type="xsd:anyURI" use="required"/>
+                        <xsd:attribute name="version" type="xsd:decimal"/>
+                        <xsd:attribute name="vendor" type="xsd:anyURI" use="required"/>
+                      </xsd:complexType>
+                    </xsd:element>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="AddData" type="ppx:AddData" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required"/>
+            <xsd:attribute name="creationDateTime" type="xsd:dateTime" use="required"/>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Types">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="GlobalNamespace">
+                <xsd:complexType>
+                  <xsd:complexContent>
+                    <xsd:extension base="ppx:TextualObjectBase">
+                      <xsd:sequence>
+                        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                          <xsd:element name="NamespaceDecl" type="ppx:NamespaceDecl"/>
+                          <xsd:element name="DataTypeDecl" type="ppx:UserDefinedTypeDecl"/>
+                          <xsd:group ref="ppx:PouDecl"/>
+                        </xsd:choice>
+                      </xsd:sequence>
+                    </xsd:extension>
+                  </xsd:complexContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="Instances">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Configuration" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:complexContent>
+                    <xsd:extension base="ppx:TextualObjectBase">
+                      <xsd:sequence>
+                        <xsd:element name="Resource" minOccurs="0" maxOccurs="unbounded">
+                          <xsd:complexType>
+                            <xsd:complexContent>
+                              <xsd:extension base="ppx:TextualObjectBase">
+                                <xsd:sequence>
+                                  <xsd:element name="GlobalVars" type="ppx:VarList" minOccurs="0" maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                                <xsd:attribute name="name" type="xsd:string" use="required"/>
+                                <xsd:attribute name="resourceTypeName" type="xsd:string" use="required"/>
+                              </xsd:extension>
+                            </xsd:complexContent>
+                          </xsd:complexType>
+                        </xsd:element>
+                      </xsd:sequence>
+                      <xsd:attribute name="name" type="xsd:string" use="required"/>
+                    </xsd:extension>
+                  </xsd:complexContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute name="schemaVersion" type="xsd:decimal" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+  <!--Abstract types-->
+  <xsd:complexType name="TypeSpecBase" abstract="true"/>
+  <xsd:complexType name="InstantlyDefinableTypeSpecBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TypeSpecBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="BehaviorRepresentationBase" abstract="true"/>
+  <xsd:complexType name="ProgrammingLanguageBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:BehaviorRepresentationBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="IdentifiedObjectBase" abstract="true">
+    <xsd:sequence>
+      <xsd:element name="Documentation" type="ppx:TextBase" minOccurs="0"/>
+      <xsd:element name="AddData" type="ppx:AddData" minOccurs="0"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="GraphicalObjectBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:IdentifiedObjectBase">
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="CommonObjectBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:GraphicalObjectBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="FbdObjectBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:GraphicalObjectBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="LdObjectBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:GraphicalObjectBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="NetworkBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:GraphicalObjectBase">
+        <xsd:attribute name="label" type="xsd:string" use="optional"/>
+        <xsd:attribute name="evaluationOrder" type="xsd:unsignedLong" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="TextualObjectBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:IdentifiedObjectBase">
+        <xsd:sequence>
+          <xsd:element name="UsingDirective" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="NamespaceContentBase" abstract="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Namespace declaration-->
+  <xsd:complexType name="NamespaceDecl">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:NamespaceContentBase">
+        <xsd:sequence>
+          <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="NamespaceDecl" type="ppx:NamespaceDecl"/>
+            <xsd:element name="DataTypeDecl" type="ppx:UserDefinedTypeDecl"/>
+            <xsd:element name="FunctionBlock" type="ppx:FunctionBlock"/>
+            <xsd:element name="Function" type="ppx:Function"/>
+          </xsd:choice>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--User-defined data type declaration-->
+  <xsd:complexType name="UserDefinedTypeDecl">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:NamespaceContentBase">
+        <xsd:sequence>
+          <xsd:element name="UserDefinedTypeSpec" type="ppx:TypeSpecBase"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ArrayTypeSpec">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:InstantlyDefinableTypeSpecBase">
+        <xsd:sequence>
+          <xsd:element name="BaseType" type="ppx:TypeRef"/>
+          <xsd:element name="DimensionSpec" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:choice>
+                <xsd:element name="IndexRange">
+                  <xsd:complexType>
+                    <xsd:attribute name="lower" type="xsd:string" use="required"/>
+                    <xsd:attribute name="upper" type="xsd:string" use="required"/>
+                  </xsd:complexType>
+                </xsd:element>
+                <xsd:element name="VariableLength" type="xsd:boolean" fixed="true"/>
+              </xsd:choice>
+              <xsd:attribute name="dimensionNumber" type="xsd:unsignedInt" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="AddData" type="ppx:AddData" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="EnumTypeSpec">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TypeSpecBase">
+        <xsd:sequence>
+          <xsd:element name="Enumerator" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Documentation" type="ppx:TextBase" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="AddData" type="ppx:AddData" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="EnumTypeWithNamedValueSpec">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TypeSpecBase">
+        <xsd:sequence>
+          <xsd:element name="Enumerator" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="Documentation" type="ppx:TextBase" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="value" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="BaseType" type="ppx:ElementaryType"/>
+          <xsd:element name="AddData" type="ppx:AddData" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="StructTypeSpec">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TypeSpecBase">
+        <xsd:sequence>
+          <xsd:element name="Member" type="ppx:VariableDecl" minOccurs="1" maxOccurs="unbounded"/>
+          <xsd:element name="AddData" type="ppx:AddData" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="overlap" type="xsd:boolean" use="optional" default="false"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType name="ElementaryType">
+    <xsd:union>
+      <xsd:simpleType>
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="DINT"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+  <!--POU declaration-->
+  <xsd:group name="PouDecl">
+    <xsd:choice>
+      <xsd:element name="Program" type="ppx:Program"/>
+      <xsd:element name="FunctionBlock" type="ppx:FunctionBlock"/>
+      <xsd:element name="Function" type="ppx:Function"/>
+    </xsd:choice>
+  </xsd:group>
+  <xsd:complexType name="Program">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:NamespaceContentBase">
+        <xsd:sequence>
+          <xsd:element name="ExternalVars" type="ppx:ExternalVarList" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="Vars" type="ppx:VarListWithAccessSpec" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="MainBody" type="ppx:Body" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="FunctionBlock">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:NamespaceContentBase">
+        <xsd:sequence>
+          <xsd:element name="Parameters" type="ppx:ParameterSet" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="ExternalVars" type="ppx:ExternalVarList" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="Vars" type="ppx:VarListWithAccessSpec" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="MainBody" type="ppx:Body" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Function">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:NamespaceContentBase">
+        <xsd:sequence>
+          <xsd:element name="ResultType" type="ppx:TypeRef" minOccurs="0" maxOccurs="1"/>
+          <xsd:element name="Parameters" type="ppx:ParameterSet" maxOccurs="1"/>
+          <xsd:element name="ExternalVars" type="ppx:ExternalVarList" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="TempVars" type="ppx:VarList" minOccurs="0" maxOccurs="unbounded"/>
+          <xsd:element name="MainBody" type="ppx:BodyWithoutSFC" maxOccurs="1"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ParameterSet">
+    <xsd:sequence>
+      <xsd:choice minOccurs="0" maxOccurs="unbounded">
+        <xsd:element name="InoutVars">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Variable" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:complexContent>
+                    <xsd:extension base="ppx:VariableDecl">
+                      <xsd:attribute name="orderWithinParamSet" type="xsd:unsignedInt" use="required"/>
+                    </xsd:extension>
+                  </xsd:complexContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="InputVars">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Variable" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:complexContent>
+                    <xsd:extension base="ppx:VariableDecl">
+                      <xsd:attribute name="orderWithinParamSet" type="xsd:unsignedInt" use="required"/>
+                      <xsd:attribute name="edgeDetection" type="ppx:EdgeModifierType" use="optional" default="none"/>
+                    </xsd:extension>
+                  </xsd:complexContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="retain" type="xsd:boolean" use="optional" default="false"/>
+            <xsd:attribute name="non_retain" type="xsd:boolean" use="optional" default="false"/>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="OutputVars">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="Variable" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                  <xsd:complexContent>
+                    <xsd:extension base="ppx:VariableDecl">
+                      <xsd:attribute name="orderWithinParamSet" type="xsd:unsignedInt" use="required"/>
+                    </xsd:extension>
+                  </xsd:complexContent>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="retain" type="xsd:boolean" use="optional" default="false"/>
+            <xsd:attribute name="non_retain" type="xsd:boolean" use="optional" default="false"/>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:choice>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="VarListWithAccessSpec">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:VarList">
+        <xsd:attribute name="accessSpecifier" type="ppx:AccessSpecifiers" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType name="AccessSpecifiers">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="private"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="Body">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:sequence>
+          <xsd:element name="BodyContent" type="ppx:BehaviorRepresentationBase" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="BodyWithoutSFC">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:sequence>
+          <xsd:element name="BodyContent" type="ppx:ProgrammingLanguageBase" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Variable declaration -->
+  <xsd:complexType name="VarList">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:sequence>
+          <xsd:element name="Variable" type="ppx:VariableDecl" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="constant" type="xsd:boolean" use="optional" default="false"/>
+        <xsd:attribute name="retain" type="xsd:boolean" use="optional" default="false"/>
+        <xsd:attribute name="non_retain" type="xsd:boolean" use="optional" default="false"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ExternalVarList">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:sequence>
+          <xsd:element name="Variable" type="ppx:VariableDeclPlain" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="constant" type="xsd:boolean" use="optional" default="false"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="VariableDecl">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:VariableDeclPlain">
+        <xsd:sequence>
+          <xsd:element name="InitialValue" type="ppx:Value" minOccurs="0"/>
+          <xsd:element name="Address" type="ppx:AddressExpression" minOccurs="0"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="VariableDeclPlain">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:sequence>
+          <xsd:element name="Type" type="ppx:TypeRef"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="TypeRef">
+    <xsd:choice>
+      <xsd:element name="TypeName" type="xsd:string"/>
+      <xsd:element name="InstantlyDefinedType" type="ppx:InstantlyDefinableTypeSpecBase"/>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="Value">
+    <xsd:choice>
+      <xsd:element name="SimpleValue">
+        <xsd:complexType>
+          <xsd:attribute name="value" type="xsd:string" use="optional"/>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ArrayValue">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Value">
+              <xsd:complexType>
+                <xsd:complexContent>
+                  <xsd:extension base="ppx:Value">
+                    <xsd:attribute name="repetitionValue" type="xsd:string" use="optional" default="1"/>
+                  </xsd:extension>
+                </xsd:complexContent>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="StructValue">
+        <xsd:complexType>
+          <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="Value">
+              <xsd:complexType>
+                <xsd:complexContent>
+                  <xsd:extension base="ppx:Value">
+                    <xsd:attribute name="member" type="xsd:string" use="required"/>
+                  </xsd:extension>
+                </xsd:complexContent>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:choice>
+  </xsd:complexType>
+  <xsd:complexType name="AddressExpression">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:FixedAddressExpression">
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="FixedAddressExpression">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextualObjectBase">
+        <xsd:attribute name="address" type="xsd:string" use="optional"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Behavior representation -->
+  <xsd:complexType name="ST">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:ProgrammingLanguageBase">
+        <xsd:sequence>
+          <xsd:element name="ST" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="LD">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:ProgrammingLanguageBase">
+        <xsd:sequence>
+          <xsd:element name="Rung" type="ppx:LadderRung" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="LadderRung">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:NetworkBase">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+          <xsd:element name="CommonObject" type="ppx:CommonObjectBase"/>
+          <xsd:element name="LdObject" type="ppx:LdObjectBase"/>
+          <xsd:element name="FbdObject" type="ppx:FbdObjectBase"/>
+        </xsd:choice>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Graphical behaviour representation - Common elements-->
+  <xsd:complexType name="Comment">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:CommonObjectBase">
+        <xsd:sequence>
+          <xsd:element name="Content" type="ppx:TextBase"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Graphical behaviour representation - FBD elements-->
+  <xsd:complexType name="Block">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:FbdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="InOutVariables" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="InOutVariable" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:complexContent>
+                      <xsd:extension base="ppx:IdentifiedObjectBase">
+                        <xsd:sequence>
+                          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0"/>
+                          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0"/>
+                        </xsd:sequence>
+                        <xsd:attributeGroup ref="ppx:graphicalFormalParameterCommon"/>
+                      </xsd:extension>
+                    </xsd:complexContent>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="InputVariables" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="InputVariable" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:complexContent>
+                      <xsd:extension base="ppx:IdentifiedObjectBase">
+                        <xsd:sequence>
+                          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0"/>
+                        </xsd:sequence>
+                        <xsd:attributeGroup ref="ppx:graphicalFormalParameterCommon"/>
+                        <xsd:attribute name="edge" type="ppx:EdgeModifierType" use="optional" default="none"/>
+                        <xsd:attribute name="suppressName" type="xsd:boolean" use="optional" default="false"/>
+                      </xsd:extension>
+                    </xsd:complexContent>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="OutputVariables" minOccurs="0">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="OutputVariable" minOccurs="0" maxOccurs="unbounded">
+                  <xsd:complexType>
+                    <xsd:complexContent>
+                      <xsd:extension base="ppx:IdentifiedObjectBase">
+                        <xsd:sequence>
+                          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0"/>
+                        </xsd:sequence>
+                        <xsd:attributeGroup ref="ppx:graphicalFormalParameterCommon"/>
+                        <xsd:attribute name="suppressName" type="xsd:boolean" use="optional" default="false"/>
+                      </xsd:extension>
+                    </xsd:complexContent>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="typeName" type="xsd:string" use="required"/>
+        <xsd:attribute name="instanceName" type="xsd:string" use="optional"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:attributeGroup name="graphicalFormalParameterCommon">
+    <xsd:attribute name="parameterName" type="xsd:string" use="required"/>
+    <xsd:attribute name="negated" type="xsd:boolean" use="optional" default="false"/>
+  </xsd:attributeGroup>
+  <xsd:complexType name="DataSource">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:FbdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="identifier" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="DataSink">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:FbdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="identifier" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Jump">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:FbdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="targetNetworkLabel" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Graphical behaviour representation - LD elements-->
+  <xsd:complexType name="LeftPowerRail">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:LdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="RightPowerRail">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:LdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Coil">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:LdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0"/>
+          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="negated" type="xsd:boolean" use="optional" default="false"/>
+        <xsd:attribute name="edge" type="ppx:EdgeModifierType" use="optional" default="none"/>
+        <xsd:attribute name="latch" use="optional" default="none">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="none"/>
+              <xsd:enumeration value="set"/>
+              <xsd:enumeration value="reset"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="operand" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Contact">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:LdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0"/>
+          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="negated" type="xsd:boolean" use="optional" default="false"/>
+        <xsd:attribute name="edge" type="ppx:EdgeModifierType" use="optional" default="none"/>
+        <xsd:attribute name="operand" type="xsd:string" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!--Graphical behaviour representation - Connections-->
+  <xsd:complexType name="ConnectionPointIn">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:IdentifiedObjectBase">
+        <xsd:sequence>
+          <xsd:element name="Connection" type="ppx:Connection" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="Connection">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:IdentifiedObjectBase">
+        <xsd:attribute name="refConnectionPointOutId" type="xsd:unsignedLong" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="ConnectionPointOut">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:IdentifiedObjectBase">
+        <xsd:attribute name="connectionPointOutId" type="xsd:unsignedLong" use="required"/>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <!-- Miscellaneous -->
+  <xsd:complexType name="XyDecimalValue">
+    <xsd:attribute name="x" type="xsd:decimal" use="required"/>
+    <xsd:attribute name="y" type="xsd:decimal" use="required"/>
+  </xsd:complexType>
+  <xsd:complexType name="AddData">
+    <xsd:sequence>
+      <xsd:element name="Data" minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:any namespace="##any" processContents="lax"/>
+          </xsd:sequence>
+          <xsd:attribute name="name" type="xsd:anyURI" use="required"/>
+          <xsd:attribute name="handleUnknown" use="required">
+            <xsd:simpleType>
+              <xsd:restriction base="xsd:NMTOKEN">
+                <xsd:enumeration value="discard"/>
+              </xsd:restriction>
+            </xsd:simpleType>
+          </xsd:attribute>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TextBase" abstract="true"/>
+  <xsd:complexType name="SimpleText" mixed="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextBase"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:simpleType name="EdgeModifierType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="none"/>
+      <xsd:enumeration value="falling"/>
+      <xsd:enumeration value="rising"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:schema>

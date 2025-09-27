@@ -1,0 +1,104 @@
+import 'dart:io';
+
+import 'package:dart_code/dart_code.dart';
+import 'package:xml/xml.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_name.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_typedef.dart';
+import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_complex_type.dart';
+import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_simple_type.dart';
+import 'package:xsd_to_dart_code_generator/generate/logger.dart';
+
+/// | XSD Construct             | Dart Equivalent                           |
+/// |---------------------------|-------------------------------------------|
+/// | `xsd:complexType`         | Dart class                                |
+/// | `xsd:element`             | Dart field                                |
+/// | `xsd:attribute`           | Dart field                                |
+/// | `xsd:sequence`            | Ordered fields                            |
+/// | `xsd:choice`              | One of several fields (can be polymorphic)|
+/// | `xsd:group`               | Dart class or reused field group          |
+/// | `minOccurs="0"`           | Optional field (nullable)                 |
+/// | `maxOccurs="unbounded"`   | `List<T>`                                 |
+/// | `xsd:extension`           | Dart class inheritance (`extends`)        |
+
+Library2? generateFromFile(File xsdFile) {
+  try {
+    var xsdDocument = XsdDocument(xsdFile);
+
+    var typeDeclarations = <CodeModel>[];
+    typeDeclarations.addAll(generateComplexTypes(xsdDocument));
+    typeDeclarations.addAll(generateSimpleTypes(xsdDocument));
+
+    return Library2(
+      classes: typeDeclarations.whereType<Class>().toList(),
+      enums: typeDeclarations.whereType<Enumeration>().toList(),
+      typeDefs: typeDeclarations.whereType<TypeDef>().toList(),
+    );
+  } catch (e) {
+    log.warning('Error creating Dart code from: ${xsdFile.path} Error: $e');
+    return null;
+  }
+}
+
+const xsdNamespaceUri = 'http://www.w3.org/2001/XMLSchema';
+
+//TODO replace by XsdSchema (that is a XmlElement if possible)
+class XsdDocument extends XmlDocument {
+  final File xsdFile;
+  final XmlDocument document;
+  final XsdSchema schema;
+
+  XsdDocument._(this.xsdFile, this.document, this.schema);
+
+  factory XsdDocument(File xsdFile) {
+    var xmlString = xsdFile.readAsStringSync();
+    var document = XmlDocument.parse(xmlString);
+    var schema = XsdSchema(document);
+    return XsdDocument._(xsdFile, document, schema);
+  }
+}
+
+class XsdSchema {
+  final XmlElement element;
+
+  XsdSchema._(this.element);
+
+  factory XsdSchema(XmlDocument xsdDocument) {
+    XmlElement? element = xsdDocument
+        .findElements("schema", namespace: xsdNamespaceUri)
+        .firstOrNull;
+
+    if (element == null) {
+      throw ArgumentError("No schema element found in XSD document");
+    }
+    return XsdSchema._(element);
+  }
+
+  String? findNameSpaceUri(String nameSpacePrefixToFind) {
+    var attributes = element.attributes;
+    for (var attribute in attributes) {
+      if (attribute.name.prefix == 'xmlns' &&
+          attribute.name.local == nameSpacePrefixToFind) {
+        return attribute.value;
+      }
+    }
+    return null;
+  }
+}
+
+String findTypeName(XmlElement xsdElement) {
+  var name = xsdElement.getAttribute('name');
+  if (name != null && name.isNotEmpty) {
+    return toValidDartNameStartingWitUpperCase(name);
+  }
+
+  var parent = xsdElement.parent;
+  if (parent is XmlElement &&
+      (parent.name.local == 'element' || parent.name.local == 'attribute')) {
+    name = parent.getAttribute('name');
+    return toValidDartNameStartingWitUpperCase(name);
+  }
+
+  throw ArgumentError('It or its parent has no name attribute');
+}

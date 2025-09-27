@@ -1,0 +1,1427 @@
+<?xml version="1.0"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smcext="https://www.ia.omron.com/Smc" xsi:schemaLocation="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" schemaVersion="1" xmlns="www.iec.ch/public/TC65SC65BWG7TF10">
+  <FileHeader companyName="OMRON Corporation" productName="Sysmac Studio" productVersion="1.30.0.0" />
+  <ContentHeader name="Sample" creationDateTime="2019-07-26T13:18:11">
+    <AddDataInfo>
+      <Info name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" vendor="https://www.ia.omron.com/Smc" />
+    </AddDataInfo>
+    <AddData>
+      <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+        <smcext:DeviceInfo modelName="NJ501-1500" version="1.40" />
+      </Data>
+    </AddData>
+  </ContentHeader>
+  <Types>
+    <GlobalNamespace>
+      <DataTypeDecl name="Structure1">
+        <Documentation xsi:type="SimpleText">Structure1 Comment</Documentation>
+        <UserDefinedTypeSpec xsi:type="StructTypeSpec">
+          <Member name="Structure1_Member1">
+            <Documentation xsi:type="SimpleText">Structure1_Member1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:MultiComment>
+                  <smcext:Text id="2">Structure1_Member1 SubComment (Comment2)</smcext:Text>
+                </smcext:MultiComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Member>
+          <AddData>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:MultiComment>
+                <smcext:Text id="2">Structure1 SubComment (Comment2)</smcext:Text>
+              </smcext:MultiComment>
+            </Data>
+          </AddData>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <DataTypeDecl name="Structure2">
+        <UserDefinedTypeSpec xsi:type="StructTypeSpec">
+          <Member name="Structure2_Member1">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <Address address="0.0" />
+          </Member>
+          <Member name="Structure2_Member2">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <Address address="0.1" />
+          </Member>
+          <AddData>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:StructTypeSpecAdditionalProperties offsetType="CJ" />
+            </Data>
+          </AddData>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <DataTypeDecl name="Structure3">
+        <Documentation xsi:type="SimpleText">Structure3 Comment</Documentation>
+        <UserDefinedTypeSpec xsi:type="StructTypeSpec">
+          <Member name="Structure3_Member1">
+            <Documentation xsi:type="SimpleText">Structure3_Member1 Comment</Documentation>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <Address address="0.0" />
+          </Member>
+          <Member name="Structure3_Member2">
+            <Documentation xsi:type="SimpleText">Structure3_Member2 Comment</Documentation>
+            <Type>
+              <TypeName>DINT</TypeName>
+            </Type>
+            <Address address="1" />
+          </Member>
+          <AddData>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:StructTypeSpecAdditionalProperties offsetType="User" />
+            </Data>
+          </AddData>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <DataTypeDecl name="Union1">
+        <Documentation xsi:type="SimpleText">Union1 Comment</Documentation>
+        <UserDefinedTypeSpec xsi:type="StructTypeSpec" overlap="true">
+          <Member name="Union1_Member1">
+            <Documentation xsi:type="SimpleText">Union1_Member1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:MultiComment>
+                  <smcext:Text id="2">Union1_Member1 SubComment (Comment2)</smcext:Text>
+                </smcext:MultiComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Member>
+          <AddData>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:MultiComment>
+                <smcext:Text id="2">Union1 SubComment (Comment2)</smcext:Text>
+              </smcext:MultiComment>
+            </Data>
+          </AddData>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <DataTypeDecl name="Enumerated1">
+        <UserDefinedTypeSpec xsi:type="EnumTypeWithNamedValueSpec">
+          <Enumerator name="Enumerated1_Member1" value="0" />
+          <BaseType>DINT</BaseType>
+          <AddData>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:MultiComment>
+                <smcext:Text id="2">Enumerated1 SubComment (Comment2)</smcext:Text>
+              </smcext:MultiComment>
+            </Data>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:EnumeratorsComment>
+                <smcext:EnumeratorComment enumerator="Enumerated1_Member1">
+                  <smcext:Text id="2">Enumrated_Member1 SubComment (Comment2)</smcext:Text>
+                </smcext:EnumeratorComment>
+              </smcext:EnumeratorsComment>
+            </Data>
+          </AddData>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <DataTypeDecl name="Enumerated2">
+        <UserDefinedTypeSpec xsi:type="EnumTypeWithNamedValueSpec">
+          <Enumerator name="Enuerated2_Member1" value="0" />
+          <Enumerator name="Enuerated2_Member2" value="1" />
+          <BaseType>DINT</BaseType>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <DataTypeDecl name="Union2">
+        <UserDefinedTypeSpec xsi:type="StructTypeSpec" overlap="true">
+          <Member name="Union2_Member1">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Member>
+          <Member name="Union2_Member2">
+            <Type>
+              <TypeName>BYTE</TypeName>
+            </Type>
+          </Member>
+        </UserDefinedTypeSpec>
+      </DataTypeDecl>
+      <Program name="Program0">
+        <Documentation xsi:type="SimpleText">Program0 Comment</Documentation>
+        <AddData>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T13:18:12" modificationDateTime="2019-07-29T14:56:40" />
+          </Data>
+        </AddData>
+        <UsingDirective>Namespace1\Namespace1</UsingDirective>
+        <UsingDirective>Namespace1</UsingDirective>
+        <ExternalVars constant="true">
+          <Variable name="global_Var1">
+            <Documentation xsi:type="SimpleText">global_Var1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">global_Var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </ExternalVars>
+        <ExternalVars>
+          <Variable name="global_Var2">
+            <Type>
+              <TypeName>BYTE</TypeName>
+            </Type>
+          </Variable>
+        </ExternalVars>
+        <Vars constant="true" retain="true" accessSpecifier="private">
+          <Variable name="var6">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <Address address="%d4" />
+          </Variable>
+        </Vars>
+        <Vars constant="true" accessSpecifier="private">
+          <Variable name="var5">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </Vars>
+        <Vars retain="true" accessSpecifier="private">
+          <Variable name="var4">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <InitialValue>
+              <SimpleValue value="True" />
+            </InitialValue>
+          </Variable>
+        </Vars>
+        <Vars accessSpecifier="private">
+          <Variable name="var1">
+            <Documentation xsi:type="SimpleText">var1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+          <Variable name="var2">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+          <Variable name="var3">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+          <Variable name="fb0">
+            <Type>
+              <TypeName>FunctionBlock0</TypeName>
+            </Type>
+          </Variable>
+          <Variable name="r_Trig1">
+            <Type>
+              <TypeName>R_TRIG</TypeName>
+            </Type>
+          </Variable>
+          <Variable name="abc">
+            <Type>
+              <TypeName>_sTimer</TypeName>
+            </Type>
+          </Variable>
+          <Variable name="fb2">
+            <Type>
+              <TypeName>Namespace1\Namespace1\FunctionBlock2</TypeName>
+            </Type>
+          </Variable>
+        </Vars>
+        <MainBody>
+          <BodyContent xsi:type="smcext:LdSection" name="Section0" evaluationOrder="1">
+            <Rung evaluationOrder="1">
+              <CommonObject xsi:type="Comment">
+                <Content xsi:type="SimpleText">Rung0 Comment</Content>
+              </CommonObject>
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="var2">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="3" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="2">
+              <CommonObject xsi:type="Comment">
+                <Content xsi:type="SimpleText">Rung1 Comment
+new Line</Content>
+              </CommonObject>
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="var2">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="3" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="4" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="4" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="3">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+                <ConnectionPointOut connectionPointOutId="2" />
+                <ConnectionPointOut connectionPointOutId="3" />
+                <ConnectionPointOut connectionPointOutId="4" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="5" />
+              </LdObject>
+              <LdObject xsi:type="Contact" edge="rising" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="6" />
+              </LdObject>
+              <LdObject xsi:type="Contact" edge="falling" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="7" />
+              </LdObject>
+              <LdObject xsi:type="Contact" negated="true" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="4" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="8" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="5" />
+                  <Connection refConnectionPointOutId="6" />
+                  <Connection refConnectionPointOutId="7" />
+                  <Connection refConnectionPointOutId="8" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="9" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="9" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="4">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="3" />
+              </LdObject>
+              <LdObject xsi:type="Coil" edge="rising" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="4" />
+              </LdObject>
+              <LdObject xsi:type="Coil" edge="falling" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="5" />
+              </LdObject>
+              <LdObject xsi:type="Coil" negated="true" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="6" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="4" />
+                </ConnectionPointIn>
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="5" />
+                </ConnectionPointIn>
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="6" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="5">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="DataSource" identifier="var1">
+                <ConnectionPointOut connectionPointOutId="2" />
+              </FbdObject>
+              <FbdObject xsi:type="DataSource" identifier="var2">
+                <ConnectionPointOut connectionPointOutId="3" />
+              </FbdObject>
+              <FbdObject xsi:type="Block" typeName="Function0">
+                <InOutVariables>
+                  <InOutVariable parameterName="inout_Variable1">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="3" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="3" />
+                    </ConnectionPointIn>
+                    <ConnectionPointOut connectionPointOutId="6">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="3" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </InOutVariable>
+                </InOutVariables>
+                <InputVariables>
+                  <InputVariable parameterName="EN">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="1" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                  <InputVariable parameterName="input_Variable1">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="2" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="2" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                </InputVariables>
+                <OutputVariables>
+                  <OutputVariable parameterName="">
+                    <ConnectionPointOut connectionPointOutId="4">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="1" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                  <OutputVariable parameterName="output_Variable1">
+                    <ConnectionPointOut connectionPointOutId="5">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="2" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                </OutputVariables>
+              </FbdObject>
+              <FbdObject xsi:type="DataSink" identifier="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="5" />
+                </ConnectionPointIn>
+              </FbdObject>
+              <FbdObject xsi:type="DataSink" identifier="var2">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="6" />
+                </ConnectionPointIn>
+              </FbdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="4" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="6">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="Block" typeName="Function2">
+                <InputVariables>
+                  <InputVariable parameterName="EN">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="1" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                </InputVariables>
+                <OutputVariables>
+                  <OutputVariable parameterName="ENO">
+                    <ConnectionPointOut connectionPointOutId="2">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="1" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                  <OutputVariable parameterName="">
+                    <ConnectionPointOut connectionPointOutId="3">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="2" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                </OutputVariables>
+              </FbdObject>
+              <FbdObject xsi:type="DataSink" identifier="">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+              </FbdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="7">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="DataSource" identifier="UINT#10">
+                <ConnectionPointOut connectionPointOutId="2" />
+              </FbdObject>
+              <FbdObject xsi:type="DataSource" identifier="abc">
+                <ConnectionPointOut connectionPointOutId="3" />
+              </FbdObject>
+              <FbdObject xsi:type="Block" typeName="Timer">
+                <InOutVariables>
+                  <InOutVariable parameterName="TimerDat">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="3" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="3" />
+                    </ConnectionPointIn>
+                    <ConnectionPointOut connectionPointOutId="6">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="3" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </InOutVariable>
+                </InOutVariables>
+                <InputVariables>
+                  <InputVariable parameterName="In">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="1" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                  <InputVariable parameterName="PT">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="2" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="2" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                </InputVariables>
+                <OutputVariables>
+                  <OutputVariable parameterName="">
+                    <ConnectionPointOut connectionPointOutId="4">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="1" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                  <OutputVariable parameterName="Q">
+                    <ConnectionPointOut connectionPointOutId="5">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="2" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                  <OutputVariable parameterName="ET">
+                    <ConnectionPointOut connectionPointOutId="7">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="4" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                </OutputVariables>
+              </FbdObject>
+              <FbdObject xsi:type="DataSink" identifier="">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="5" />
+                </ConnectionPointIn>
+              </FbdObject>
+              <FbdObject xsi:type="DataSink" identifier="abc">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="6" />
+                </ConnectionPointIn>
+              </FbdObject>
+              <FbdObject xsi:type="DataSink" identifier="">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="7" />
+                </ConnectionPointIn>
+              </FbdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="4" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="8">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="Block" typeName="FunctionBlock0" instanceName="fb0">
+                <InputVariables>
+                  <InputVariable parameterName="input_Variable1">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="1" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                </InputVariables>
+                <OutputVariables>
+                  <OutputVariable parameterName="output_Variable1">
+                    <ConnectionPointOut connectionPointOutId="2">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="1" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                </OutputVariables>
+              </FbdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="9">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="DataSource" identifier="var1">
+                <ConnectionPointOut connectionPointOutId="2" />
+              </FbdObject>
+              <FbdObject xsi:type="DataSource" identifier="var2">
+                <ConnectionPointOut connectionPointOutId="3" />
+              </FbdObject>
+              <FbdObject xsi:type="Block" typeName="FunctionBlock2" instanceName="fb2">
+                <InputVariables>
+                  <InputVariable parameterName="input_Variable1">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="1" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                  <InputVariable parameterName="input_Variable2" edge="rising">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="2" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="2" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                  <InputVariable parameterName="input_Variable3" edge="falling">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="3" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="3" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                </InputVariables>
+                <OutputVariables>
+                  <OutputVariable parameterName="output_Variable1">
+                    <ConnectionPointOut connectionPointOutId="4">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="1" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                </OutputVariables>
+              </FbdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="4" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="10">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="Block" typeName="R_TRIG" instanceName="r_Trig1">
+                <InputVariables>
+                  <InputVariable parameterName="Clk">
+                    <ConnectionPointIn>
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointInOrder order="1" />
+                        </Data>
+                      </AddData>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                  </InputVariable>
+                </InputVariables>
+                <OutputVariables>
+                  <OutputVariable parameterName="Q">
+                    <ConnectionPointOut connectionPointOutId="2">
+                      <AddData>
+                        <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                          <smcext:ConnectionPointOutOrder order="1" />
+                        </Data>
+                      </AddData>
+                    </ConnectionPointOut>
+                  </OutputVariable>
+                </OutputVariables>
+              </FbdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="11">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="smcext:InlineST">
+                <AddData>
+                  <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                    <smcext:SmcSize width="400" height="130" />
+                  </Data>
+                </AddData>
+                <smcext:ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </smcext:ConnectionPointIn>
+                <smcext:ConnectionPointOut connectionPointOutId="2" />
+                <smcext:ST>
+                  <ST>var1:=TRUE;</ST>
+                </smcext:ST>
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+            <Rung evaluationOrder="12">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <FbdObject xsi:type="Jump" targetNetworkLabel="Label1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+              </FbdObject>
+            </Rung>
+            <Rung label="Label1" evaluationOrder="13">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="var3">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+          </BodyContent>
+          <BodyContent xsi:type="smcext:LdSection" name="Section1" evaluationOrder="2">
+            <Rung evaluationOrder="1">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="var1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+          </BodyContent>
+        </MainBody>
+      </Program>
+      <Program name="Program1">
+        <AddData>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T13:27:09" modificationDateTime="2019-07-29T14:56:40" />
+          </Data>
+        </AddData>
+        <Vars accessSpecifier="private">
+          <Variable name="var1">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </Vars>
+        <MainBody>
+          <BodyContent xsi:type="ST">
+            <ST>// Write codes in Structured Text (ST).
+var1:=TRUE;</ST>
+          </BodyContent>
+        </MainBody>
+      </Program>
+      <Function name="Function0">
+        <Documentation xsi:type="SimpleText">Function0 Comment</Documentation>
+        <AddData>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T13:27:11" modificationDateTime="2019-07-29T14:56:40" />
+          </Data>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:FunctionResultComment>
+              <smcext:Text id="1">Return_Variable Comment</smcext:Text>
+              <smcext:Text id="2">Return_Variable SubComment (Comment2)</smcext:Text>
+            </smcext:FunctionResultComment>
+          </Data>
+        </AddData>
+        <ResultType>
+          <TypeName>BOOL</TypeName>
+        </ResultType>
+        <Parameters>
+          <InputVars>
+            <Variable name="EN" orderWithinParamSet="0">
+              <Documentation xsi:type="SimpleText">EN Comment1</Documentation>
+              <AddData>
+                <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                  <smcext:VariableComment>
+                    <smcext:Text id="2">EN SubComment (Comment2)</smcext:Text>
+                  </smcext:VariableComment>
+                </Data>
+              </AddData>
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+            <Variable name="input_Variable1" orderWithinParamSet="1">
+              <AddData>
+                <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                  <smcext:ParameterSetVariableAdditionalProperties constant="true" />
+                </Data>
+              </AddData>
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </InputVars>
+          <InoutVars>
+            <Variable name="inout_Variable1" orderWithinParamSet="3">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </InoutVars>
+          <OutputVars>
+            <Variable name="output_Variable1" orderWithinParamSet="2">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </OutputVars>
+        </Parameters>
+        <ExternalVars constant="true">
+          <Variable name="global_Var1">
+            <Documentation xsi:type="SimpleText">global_var1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">global_Var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </ExternalVars>
+        <ExternalVars>
+          <Variable name="global_Var2">
+            <Type>
+              <TypeName>BYTE</TypeName>
+            </Type>
+          </Variable>
+        </ExternalVars>
+        <TempVars constant="true">
+          <Variable name="internal_Var2">
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </TempVars>
+        <TempVars>
+          <Variable name="internal_Var1">
+            <Documentation xsi:type="SimpleText">internal_Var1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">internal_Var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <InitialValue>
+              <SimpleValue value="True" />
+            </InitialValue>
+          </Variable>
+        </TempVars>
+        <MainBody>
+          <BodyContent xsi:type="LD">
+            <Rung evaluationOrder="1">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="input_Variable1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="output_Variable1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="3" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+          </BodyContent>
+        </MainBody>
+      </Function>
+      <Function name="Function1">
+        <AddData>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T16:25:44" modificationDateTime="2019-07-29T14:56:40" />
+          </Data>
+        </AddData>
+        <ResultType>
+          <TypeName>BOOL</TypeName>
+        </ResultType>
+        <Parameters>
+          <InputVars>
+            <Variable name="EN" orderWithinParamSet="0">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </InputVars>
+          <OutputVars>
+            <Variable name="ENO" orderWithinParamSet="1">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </OutputVars>
+        </Parameters>
+        <MainBody>
+          <BodyContent xsi:type="ST">
+            <ST>// Write codes in Structured Text (ST).
+ENO:=TRUE;</ST>
+          </BodyContent>
+        </MainBody>
+      </Function>
+      <FunctionBlock name="FunctionBlock0">
+        <Documentation xsi:type="SimpleText">FunctionBlock0 Comment</Documentation>
+        <AddData>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T13:27:15" modificationDateTime="2019-07-29T14:56:40" />
+          </Data>
+        </AddData>
+        <Parameters>
+          <InputVars>
+            <Variable name="input_Variable1" orderWithinParamSet="0">
+              <Documentation xsi:type="SimpleText">input_Variable1 Comment</Documentation>
+              <AddData>
+                <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                  <smcext:VariableComment>
+                    <smcext:Text id="2">internal_Var1 SubComment (Comment2)</smcext:Text>
+                  </smcext:VariableComment>
+                </Data>
+              </AddData>
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </InputVars>
+          <OutputVars>
+            <Variable name="output_Variable1" orderWithinParamSet="1">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </OutputVars>
+        </Parameters>
+        <ExternalVars constant="true">
+          <Variable name="global_Var1">
+            <Documentation xsi:type="SimpleText">global_Var1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">global_Var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </ExternalVars>
+        <ExternalVars>
+          <Variable name="global_Var2">
+            <Type>
+              <TypeName>BYTE</TypeName>
+            </Type>
+          </Variable>
+        </ExternalVars>
+        <Vars accessSpecifier="private">
+          <Variable name="internal_Var1">
+            <Documentation xsi:type="SimpleText">internal_Var1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">internal_Var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+          </Variable>
+        </Vars>
+        <MainBody>
+          <BodyContent xsi:type="LD">
+            <Rung evaluationOrder="1">
+              <LdObject xsi:type="LeftPowerRail">
+                <ConnectionPointOut connectionPointOutId="1" />
+              </LdObject>
+              <LdObject xsi:type="Contact" operand="input_Variable1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="1" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="2" />
+              </LdObject>
+              <LdObject xsi:type="Coil" operand="output_Variable1">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="2" />
+                </ConnectionPointIn>
+                <ConnectionPointOut connectionPointOutId="3" />
+              </LdObject>
+              <LdObject xsi:type="RightPowerRail">
+                <ConnectionPointIn>
+                  <Connection refConnectionPointOutId="3" />
+                </ConnectionPointIn>
+              </LdObject>
+            </Rung>
+          </BodyContent>
+        </MainBody>
+      </FunctionBlock>
+      <FunctionBlock name="FunctionBlock1">
+        <AddData>
+          <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+            <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T13:27:17" modificationDateTime="2019-07-29T14:56:40" />
+          </Data>
+        </AddData>
+        <Parameters>
+          <InputVars>
+            <Variable name="inputVariable1" orderWithinParamSet="0">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </InputVars>
+          <OutputVars>
+            <Variable name="outputVariable1" orderWithinParamSet="1">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Variable>
+          </OutputVars>
+        </Parameters>
+        <MainBody>
+          <BodyContent xsi:type="ST">
+            <ST>//  Write codes in Structured Text (ST).
+outputVariable1:=TRUE;</ST>
+          </BodyContent>
+        </MainBody>
+      </FunctionBlock>
+      <NamespaceDecl name="Namespace1">
+        <DataTypeDecl name="Structured4">
+          <UserDefinedTypeSpec xsi:type="StructTypeSpec">
+            <Member name="Structured4_Member1">
+              <Type>
+                <TypeName>BOOL</TypeName>
+              </Type>
+            </Member>
+          </UserDefinedTypeSpec>
+        </DataTypeDecl>
+        <Function name="Function2">
+          <AddData>
+            <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+              <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T16:26:52" modificationDateTime="2019-07-29T14:57:24" />
+            </Data>
+          </AddData>
+          <ResultType>
+            <TypeName>BOOL</TypeName>
+          </ResultType>
+          <Parameters>
+            <InputVars>
+              <Variable name="EN" orderWithinParamSet="0">
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+              </Variable>
+            </InputVars>
+            <OutputVars>
+              <Variable name="ENO" orderWithinParamSet="1">
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+              </Variable>
+            </OutputVars>
+          </Parameters>
+          <MainBody>
+            <BodyContent xsi:type="ST">
+              <ST>// Write codes in Structured Text (ST).
+ENO:=TRUE;</ST>
+            </BodyContent>
+          </MainBody>
+        </Function>
+        <NamespaceDecl name="Namespace1">
+          <DataTypeDecl name="Union3">
+            <Documentation xsi:type="SimpleText">Union1 Comment</Documentation>
+            <UserDefinedTypeSpec xsi:type="StructTypeSpec" overlap="true">
+              <Member name="Union3_Member1">
+                <Documentation xsi:type="SimpleText">Union1_Member1 Comment</Documentation>
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+              </Member>
+            </UserDefinedTypeSpec>
+          </DataTypeDecl>
+          <FunctionBlock name="FunctionBlock2">
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:PouInfo version="0.0.0" author="Name" creationDateTime="2019-07-26T15:17:32" modificationDateTime="2019-07-29T14:56:40" />
+              </Data>
+            </AddData>
+            <Parameters>
+              <InputVars retain="true">
+                <Variable name="input_Variable1" orderWithinParamSet="0">
+                  <Documentation xsi:type="SimpleText">input_Variable1 Comment</Documentation>
+                  <AddData>
+                    <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                      <smcext:ParameterSetVariableAdditionalProperties constant="true" />
+                    </Data>
+                  </AddData>
+                  <Type>
+                    <TypeName>BOOL</TypeName>
+                  </Type>
+                  <InitialValue>
+                    <SimpleValue value="True" />
+                  </InitialValue>
+                </Variable>
+                <Variable name="input_Variable2" orderWithinParamSet="1" edgeDetection="rising">
+                  <Type>
+                    <TypeName>BOOL</TypeName>
+                  </Type>
+                </Variable>
+              </InputVars>
+              <InputVars>
+                <Variable name="input_Variable3" orderWithinParamSet="2" edgeDetection="falling">
+                  <AddData>
+                    <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                      <smcext:ParameterSetVariableAdditionalProperties constant="true" />
+                    </Data>
+                  </AddData>
+                  <Type>
+                    <TypeName>BOOL</TypeName>
+                  </Type>
+                </Variable>
+              </InputVars>
+              <OutputVars>
+                <Variable name="output_Variable1" orderWithinParamSet="3">
+                  <Type>
+                    <TypeName>BOOL</TypeName>
+                  </Type>
+                </Variable>
+              </OutputVars>
+            </Parameters>
+            <ExternalVars constant="true">
+              <Variable name="global_Var1">
+                <Documentation xsi:type="SimpleText">global_Var1 Comment</Documentation>
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+              </Variable>
+            </ExternalVars>
+            <ExternalVars>
+              <Variable name="global_Var2">
+                <Type>
+                  <TypeName>BYTE</TypeName>
+                </Type>
+              </Variable>
+            </ExternalVars>
+            <Vars constant="true" retain="true" accessSpecifier="private">
+              <Variable name="internal_Var1">
+                <Documentation xsi:type="SimpleText">internal_Var1 Comment</Documentation>
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+                <InitialValue>
+                  <SimpleValue value="True" />
+                </InitialValue>
+                <Address address="%d1" />
+              </Variable>
+            </Vars>
+            <Vars constant="true" accessSpecifier="private">
+              <Variable name="internal_Var3">
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+                <InitialValue>
+                  <SimpleValue value="False" />
+                </InitialValue>
+              </Variable>
+            </Vars>
+            <Vars retain="true" accessSpecifier="private">
+              <Variable name="internal_Var2">
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+              </Variable>
+            </Vars>
+            <Vars accessSpecifier="private">
+              <Variable name="internal_Var4">
+                <Type>
+                  <TypeName>BOOL</TypeName>
+                </Type>
+              </Variable>
+            </Vars>
+            <MainBody>
+              <BodyContent xsi:type="LD">
+                <Rung evaluationOrder="1">
+                  <LdObject xsi:type="LeftPowerRail">
+                    <ConnectionPointOut connectionPointOutId="1" />
+                  </LdObject>
+                  <LdObject xsi:type="Contact" operand="input_Variable1">
+                    <ConnectionPointIn>
+                      <Connection refConnectionPointOutId="1" />
+                    </ConnectionPointIn>
+                    <ConnectionPointOut connectionPointOutId="2" />
+                  </LdObject>
+                  <LdObject xsi:type="Coil" operand="output_Variable1">
+                    <ConnectionPointIn>
+                      <Connection refConnectionPointOutId="2" />
+                    </ConnectionPointIn>
+                    <ConnectionPointOut connectionPointOutId="3" />
+                  </LdObject>
+                  <LdObject xsi:type="RightPowerRail">
+                    <ConnectionPointIn>
+                      <Connection refConnectionPointOutId="3" />
+                    </ConnectionPointIn>
+                  </LdObject>
+                </Rung>
+              </BodyContent>
+            </MainBody>
+          </FunctionBlock>
+        </NamespaceDecl>
+      </NamespaceDecl>
+      <NamespaceDecl name="Namespace2">
+        <DataTypeDecl name="Enumerated3">
+          <UserDefinedTypeSpec xsi:type="EnumTypeWithNamedValueSpec">
+            <Enumerator name="Enumerated3_Member1" value="0" />
+            <BaseType>DINT</BaseType>
+          </UserDefinedTypeSpec>
+        </DataTypeDecl>
+      </NamespaceDecl>
+    </GlobalNamespace>
+  </Types>
+  <Instances>
+    <Configuration name="ConfigurationName">
+      <Resource name="ResourceName" resourceTypeName="">
+        <GlobalVars constant="true" retain="true">
+          <Variable name="global_Var1">
+            <Documentation xsi:type="SimpleText">global_Variable1 Comment</Documentation>
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:Text id="2">global_Var1 SubComment (Comment2)</smcext:Text>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BOOL</TypeName>
+            </Type>
+            <Address address="%d4" />
+          </Variable>
+        </GlobalVars>
+        <GlobalVars constant="true">
+          <Variable name="global_Var3">
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:GlobalVariableAdditionalProperties networkPublish="Input" />
+              </Data>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:ElementComment element="[0]">
+                    <smcext:Text id="1">global_Variable2[0] Comment</smcext:Text>
+                  </smcext:ElementComment>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>ARRAY[0..10] OF Bool</TypeName>
+            </Type>
+          </Variable>
+        </GlobalVars>
+        <GlobalVars retain="true">
+          <Variable name="global_Var2">
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:GlobalVariableAdditionalProperties networkPublish="PublishOnly" />
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>BYTE</TypeName>
+            </Type>
+            <InitialValue>
+              <SimpleValue value="16#0" />
+            </InitialValue>
+          </Variable>
+        </GlobalVars>
+        <GlobalVars>
+          <Variable name="global_Var4">
+            <AddData>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:GlobalVariableAdditionalProperties networkPublish="Output" />
+              </Data>
+              <Data name="https://www.ia.omron.com/Smc IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0.xsd" handleUnknown="discard">
+                <smcext:VariableComment>
+                  <smcext:ElementComment element="Structure1_Member1">
+                    <smcext:Text id="1">global_Variable4 Structuer1_Member1 Comment</smcext:Text>
+                  </smcext:ElementComment>
+                </smcext:VariableComment>
+              </Data>
+            </AddData>
+            <Type>
+              <TypeName>Structure1</TypeName>
+            </Type>
+            <InitialValue>
+              <SimpleValue value="(Structure1_Member1 := True)" />
+            </InitialValue>
+          </Variable>
+        </GlobalVars>
+      </Resource>
+    </Configuration>
+  </Instances>
+</Project>

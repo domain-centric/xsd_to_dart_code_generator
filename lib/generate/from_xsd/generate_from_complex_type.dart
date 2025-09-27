@@ -1,0 +1,106 @@
+import 'package:dart_code/dart_code.dart';
+import 'package:xml/xml.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/post_process.dart';
+import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
+import 'package:xsd_to_dart_code_generator/generate/logger.dart';
+
+List<CodeModel> generateComplexTypes(XsdDocument xsdDocument) {
+  final complexTypes = xsdDocument.document.findAllElements(
+    'complexType',
+    namespace: xsdNamespaceUri,
+  );
+
+  final typeDefinitions = <CodeModel>[];
+
+  for (final complexType in complexTypes) {
+    var typeDefinition = generate(xsdDocument.schema, complexType);
+    if (typeDefinition != null) {
+      typeDefinitions.add(typeDefinition);
+    }
+  }
+
+  return typeDefinitions;
+}
+
+CodeModel? generate(XsdSchema schema, XmlElement complexType) {
+  String typeName;
+  try {
+    typeName = findTypeName(complexType);
+  } catch (e) {
+    log.warning(
+      'Could not find a valid Dart type name. Error: $e For: $complexType',
+    );
+    return null;
+  }
+
+  // var schema = findSchemaElement(complexType);
+
+  var superClass = findSuperClass(schema: schema, complexType: complexType);
+
+  var isAbstract = _isAbstract(complexType);
+
+  List<Field> fields = generateFieldsFromXsdElement(
+    schema: schema,
+    typeName: typeName,
+    complexType: complexType,
+  );
+
+  return ClassToBePostProcessed(
+    typeName,
+    xsdSource: complexType,
+    abstract: isAbstract,
+    fields: fields,
+    superClass: superClass,
+  );
+}
+
+bool _isAbstract(XmlElement complexType) =>
+    complexType.getAttribute('abstract') == 'true';
+
+Type? findSuperClass({
+  required XsdSchema schema,
+  required XmlElement complexType,
+}) {
+  var complexContent = complexType
+      .findElements('complexContent', namespace: xsdNamespaceUri)
+      .firstOrNull;
+  if (complexContent == null) return null;
+  var extension = complexContent
+      .findElements('extension', namespace: xsdNamespaceUri)
+      .firstOrNull;
+  if (extension == null) return null;
+  var base = extension.getAttribute('base');
+  if (base == null || base.isEmpty) return null;
+  var namespaceUri = findTypeNamespaceUri(schema, base);
+  var typeName = base.split(':').last;
+  if (namespaceUri != null) {
+    return TypeWithXsdNameSpaceUri(typeName, xsdNamespaceUri: namespaceUri);
+  }
+  return Type(typeName);
+}
+
+/// TODO Needs to lookup the proper [libraryUri] based on the [xsdNamespaceUri] when PostProcessing
+class TypeWithXsdNameSpaceUri extends Type implements PostProcess {
+  final String xsdNamespaceUri;
+  TypeWithXsdNameSpaceUri(
+    super.name, {
+    super.nullable = false,
+    required this.xsdNamespaceUri,
+  });
+}
+
+String? findTypeNamespaceUri(XsdSchema schema, String base) {
+  var baseValues = base.split(':');
+  var nameSpacePrefix = baseValues.length == 2 ? baseValues.first : null;
+  if (nameSpacePrefix != null) {
+    return schema.findNameSpaceUri(nameSpacePrefix);
+  }
+  return null;
+}
+
+
+
+
+///FIXME: xsd:group!!!!

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:ppx="www.iec.ch/public/TC65SC65BWG7TF10"
+            xmlns:smcext="https://www.ia.omron.com/Smc"
+            targetNamespace="https://www.ia.omron.com/Smc"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xsd:import namespace="www.iec.ch/public/TC65SC65BWG7TF10" schemaLocation="IEC61131_10_Ed1_0_Spc1_0.xsd" />
+
+  <!-- AddData for ContentHeader - Omron device -->
+  <xsd:element name="DeviceInfo">
+    <xsd:complexType>
+      <xsd:attribute name="modelName" type="xsd:string" />
+      <xsd:attribute name="version" type="xsd:string" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- AddData for POU -->
+  <xsd:element name="PouInfo">
+    <xsd:complexType>
+      <xsd:attribute name="version" type="xsd:string" />
+      <xsd:attribute name="author" type="xsd:string" />
+      <xsd:attribute name="creationDateTime" type="xsd:dateTime" />
+      <xsd:attribute name="modificationDateTime" type="xsd:dateTime" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- Debug program declaration -->
+  <xsd:complexType name="DebugProgram">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:Program"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!-- Ladder diagram -->
+  <xsd:element name="ConnectionPointInOrder">
+    <xsd:complexType>
+      <xsd:attribute name="order" type="xsd:unsignedLong" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="ConnectionPointOutOrder">
+    <xsd:complexType>
+      <xsd:attribute name="order" type="xsd:unsignedLong" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="SmcSize">
+    <xsd:complexType>
+      <xsd:attribute name="width" type="xsd:double" use="required"/>
+      <xsd:attribute name="height" type="xsd:double" use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:complexType name="LdSection">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:LD">
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="evaluationOrder" type="xsd:unsignedLong" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="InlineST">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:LdObjectBase">
+        <xsd:sequence>
+          <xsd:element name="ConnectionPointIn" type="ppx:ConnectionPointIn" minOccurs="0" />
+          <xsd:element name="ConnectionPointOut" type="ppx:ConnectionPointOut" minOccurs="0" />
+          <xsd:element name="ST" type="ppx:ST" />
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <!-- AddData for Structured type -->
+  <xsd:element name="StructTypeSpecAdditionalProperties">
+    <xsd:complexType>
+      <xsd:attribute name="offsetType" default="NJ">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="NJ" />
+            <xsd:enumeration value="CJ" />
+            <xsd:enumeration value="User" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- AddData for Global variable -->
+  <xsd:element name="GlobalVariableAdditionalProperties">
+    <xsd:complexType>
+      <xsd:attribute name="networkPublish" default="DoNotPublish">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="DoNotPublish" />
+            <xsd:enumeration value="PublishOnly" />
+            <xsd:enumeration value="Input" />
+            <xsd:enumeration value="Output" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- AddData for ParameterSet variable -->
+  <xsd:element name="ParameterSetVariableAdditionalProperties">
+    <xsd:complexType>
+      <xsd:attribute name="constant" type="xsd:boolean" default="false" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- Comment representation -->
+  <xsd:element name="VariableComment" type="smcext:VariableComment" />
+  <xsd:element name="EnumeratorsComment" type="smcext:EnumeratorsComment" />
+  <xsd:element name="MultiComment" type="smcext:MultiComment" />
+  <xsd:element name="FunctionResultComment" type="smcext:FunctionResultComment" />
+  <xsd:complexType name="VariableComment">
+    <xsd:complexContent>
+      <xsd:extension base="smcext:MultiComment">
+        <xsd:sequence>
+          <xsd:element name="ElementComment" minOccurs="0" maxOccurs="unbounded">
+            <xsd:complexType>
+              <xsd:complexContent>
+                <xsd:extension base="smcext:MultiComment">
+                  <xsd:attribute name="element" type="xsd:string" use="required" />
+                </xsd:extension>
+              </xsd:complexContent>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="EnumeratorsComment">
+    <xsd:sequence>
+      <xsd:element name="EnumeratorComment" minOccurs="0" maxOccurs="unbounded">
+        <xsd:complexType>
+          <xsd:complexContent>
+            <xsd:extension base="smcext:MultiComment">
+              <xsd:attribute name="enumerator" type="xsd:string" use="required" />
+            </xsd:extension>
+          </xsd:complexContent>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="FunctionResultComment">
+    <xsd:complexContent>
+      <xsd:extension base="smcext:MultiComment"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="MultiComment">
+    <xsd:sequence>
+      <xsd:element name="Text" type="smcext:TextWithId" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="TextWithId" mixed="true">
+    <xsd:complexContent>
+      <xsd:extension base="ppx:TextBase">
+        <xsd:attribute name="id" type="xsd:string" use="required" />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+</xsd:schema>
