@@ -17,24 +17,24 @@ void generateDartCode(
           .map((e) => File(e.path))
           .toList();
 
-  var libraries = <File, Library2>{};
+  var libraries = <LibraryWithSource>[];
 
   for (var xsdFile in xsdFiles) {
     var library = generateFromFile(xsdFile);
-    var dartFile = outputPathConverter.convertToDartFile(xsdFile);
+
     if (library != null) {
-      libraries[dartFile] = library;
+      libraries.add(library);
     }
   }
 
-  libraries = PostProcessors().process(libraries);
+  libraries = PostProcessors().generateOrImprove(libraries);
 
-  for (var libraryEntry in libraries.entries) {
+  for (var library in libraries) {
+    var dartFile = outputPathConverter.convertToDartFile(library.xsdSourceFile);
     log.info('=================================');
-    log.info(libraryEntry.key.path);
-    log.info("\n${libraryEntry.value.toFormattedString()}");
-
-    // dartFile.createSync(recursive: true);
-    // dartFile.writeAsStringSync(library)
+    log.info(dartFile.path);
+    log.info("\n${library.toFormattedString()}");
+    dartFile.createSync(recursive: true);
+    dartFile.writeAsStringSync(library.toFormattedString());
   }
 }

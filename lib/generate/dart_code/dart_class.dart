@@ -48,4 +48,15 @@ class ClassToBePostProcessed extends Class implements PostProcess {
       xsdSource: xsdSource ?? this.xsdSource,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ClassToBePostProcessed &&
+        name == other.name &&
+        xsdSource == other.xsdSource;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, xsdSource);
 }

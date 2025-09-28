@@ -10,6 +10,9 @@ import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_compl
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_simple_type.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 
+/// Converts a xsd file to a Library (from the dart_code package)
+/// Strategy:
+///
 /// | XSD Construct             | Dart Equivalent                           |
 /// |---------------------------|-------------------------------------------|
 /// | `xsd:complexType`         | Dart class                                |
@@ -22,21 +25,25 @@ import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 /// | `maxOccurs="unbounded"`   | `List<T>`                                 |
 /// | `xsd:extension`           | Dart class inheritance (`extends`)        |
 
-Library2? generateFromFile(File xsdFile) {
+LibraryWithSource? generateFromFile(File xsdSourceFile) {
   try {
-    var schema = Schema.fromFile(xsdFile);
+    var schema = Schema.fromFile(xsdSourceFile);
 
     var typeDeclarations = <CodeModel>[];
     typeDeclarations.addAll(generateComplexTypes(schema));
     typeDeclarations.addAll(generateSimpleTypes(schema));
 
-    return Library2(
+    return LibraryWithSource(
       classes: typeDeclarations.whereType<Class>().toList(),
       enums: typeDeclarations.whereType<Enumeration>().toList(),
       typeDefs: typeDeclarations.whereType<TypeDef>().toList(),
+      xsdSourceFile: xsdSourceFile,
+      schema: schema,
     );
   } catch (e) {
-    log.warning('Error creating Dart code from: ${xsdFile.path} Error: $e');
+    log.warning(
+      'Error creating Dart code from: ${xsdSourceFile.path} Error: $e',
+    );
     return null;
   }
 }

@@ -1,24 +1,22 @@
-import 'dart:io';
-
 import 'package:collection/collection.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/post_process/add_choice_interfaces.dart';
+import 'package:xsd_to_dart_code_generator/generate/post_process/add_mapped_types.dart';
 
 abstract class PostProcessor {
-  Map<File, Library2> process(Map<File, Library2> libraries);
+  List<LibraryWithSource> generateOrImprove(List<LibraryWithSource> libraries);
 }
 
 class PostProcessors extends DelegatingList<PostProcessor>
     implements PostProcessor {
-  PostProcessors() : super([AddChoiceInterfaces()]);
+  PostProcessors() : super([AddChoiceInterfaces(), AddMappedTypes()]);
 
   @override
-  Map<File, Library2> process(Map<File, Library2> libraries) {
-    var processedLibraries = libraries;
+  List<LibraryWithSource> generateOrImprove(List<LibraryWithSource> libraries) {
     for (var postProcessor in this) {
-      processedLibraries = postProcessor.process(processedLibraries);
+      libraries = postProcessor.generateOrImprove(libraries);
     }
-    return processedLibraries;
+    return libraries;
   }
 }
 

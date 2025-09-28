@@ -187,6 +187,18 @@ class XsdReferenceType extends Type implements PostProcess {
     required this.xsdElement,
     required this.xsdNamespaceUri,
   });
+
+  factory XsdReferenceType.fromXsdElement(schema, XmlElement xsdElement) {
+    var typeAttribute = (xsdElement.getAttribute('type') ?? '');
+    var namespacePrefix = typeAttribute.split(":").first;
+    var namespaceUri = schema.findNameSpaceUri(namespacePrefix) ?? '';
+    var typeName = typeAttribute.split(":").last;
+    return XsdReferenceType(
+      typeName,
+      xsdElement: xsdElement,
+      xsdNamespaceUri: namespaceUri,
+    );
+  }
 }
 
 Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
@@ -211,14 +223,7 @@ Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
   }
 
   // assume it is a reference to another generated class or generated enum
-  var namespacePrefix = typeAttribute.split(":").first;
-  var namespaceUri = schema.findNameSpaceUri(namespacePrefix) ?? '';
-  var typeName = typeAttribute.split(":").last;
-  var type = XsdReferenceType(
-    typeName,
-    xsdElement: xsd,
-    xsdNamespaceUri: namespaceUri,
-  );
+  var type = XsdReferenceType.fromXsdElement(schema, xsd);
 
   if (isList) {
     return Type.ofList(genericType: type, nullable: isNullable);

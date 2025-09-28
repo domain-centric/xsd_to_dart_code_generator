@@ -1,20 +1,15 @@
-import 'dart:io';
-
 import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/post_process/post_process.dart';
 
-///TODO post procesing of libraries like:  implementing interfaces,  creating constructors, creating toXml methods, creating fromXml methods,
-
 class AddChoiceInterfaces implements PostProcessor {
   @override
-  Map<File, Library2> process(Map<File, Library2> libraries) {
-    Map<File, Library2> processedLibraries = {};
-    for (var libraryEntry in libraries.entries) {
-      var newLibrary = libraryEntry.value;
-      var classes = newLibrary.classes ?? [];
+  List<LibraryWithSource> generateOrImprove(List<LibraryWithSource> libraries) {
+    var processedLibraries = <LibraryWithSource>[];
+    for (var library in libraries) {
+      var classes = library.classes ?? [];
       var xsdChoiceTypes = findXsdChoiceTypes(classes);
 
       for (var xsdChoiceType in xsdChoiceTypes) {
@@ -23,8 +18,8 @@ class AddChoiceInterfaces implements PostProcessor {
         letClassesImplementIfNeeded(classes, xsdChoiceType);
       }
 
-      newLibrary.copyWith(classes: classes);
-      processedLibraries[libraryEntry.key] = newLibrary;
+      var newLibrary = library.copyWith(classes: classes);
+      processedLibraries.add(newLibrary);
     }
     return processedLibraries;
   }
@@ -80,9 +75,19 @@ ClassToBePostProcessed letClassImplement(
   ],
 );
 
-bool isClassThatNeedsToImplement(Class clasz, XsdChoiceType xsdChoiceType) =>
-    (clasz is ClassToBePostProcessed) &&
-    xsdChoiceType.elementsThatImplementThisType.contains(clasz.xsdSource);
+bool isClassThatNeedsToImplement(Class clasz, XsdChoiceType xsdChoiceType) {
+  var classImplements = (clasz.implements ?? []).map((type) => type.name);
+  if (classImplements.contains(xsdChoiceType.name)) {
+    // already implemented
+    return false;
+  }
+  var className = clasz.name.toString();
+  var namesToFind = xsdChoiceType.elementsThatImplementThisType.map(
+    (e) => e.getAttribute('name'),
+  );
+  var needsToImplement = namesToFind.contains(className);
+  return needsToImplement;
+}
 
 List<BaseType> findAllTypes(BaseType? type) {
   if (type == null) {
