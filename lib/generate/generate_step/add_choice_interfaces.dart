@@ -2,11 +2,11 @@ import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/post_process/post_process.dart';
+import 'package:xsd_to_dart_code_generator/generate/generate_step/generator_step.dart';
 
-class AddChoiceInterfaces implements PostProcessor {
+class AddChoiceInterfaces implements GenerateStep {
   @override
-  List<LibraryWithSource> generateOrImprove(List<LibraryWithSource> libraries) {
+  List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var processedLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
       var classes = library.classes ?? [];

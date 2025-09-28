@@ -6,15 +6,15 @@ import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_name.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
-import 'package:xsd_to_dart_code_generator/generate/post_process/post_process.dart';
+import 'package:xsd_to_dart_code_generator/generate/generate_step/generator_step.dart';
 
 // If element name is other than the name of its type and type is complex type create a new class that extends the type
 // e.g.       <xsd:element name="NamespaceDecl" type="ppx:NamespaceDecl"/> // creates nothing
 //                           <xsd:element name="DataTypeDecl" type="ppx:UserDefinedTypeDecl"/> // creates a class DataTypeDecl that extends UserDefinedTypeDecl
 
-class AddMappedTypes implements PostProcessor {
+class AddMappedTypes implements GenerateStep {
   @override
-  List<LibraryWithSource> generateOrImprove(List<LibraryWithSource> libraries) {
+  List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var processedLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
       var classes = library.classes ?? [];
