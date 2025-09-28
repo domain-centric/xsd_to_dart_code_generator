@@ -2,17 +2,17 @@ import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_name.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
-import 'package:xsd_to_dart_code_generator/generate/generate_step/generator_step.dart';
+import 'package:xsd_to_dart_code_generator/generate/generate_step/generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
 // If element name is other than the name of its type and type is complex type create a new class that extends the type
 // e.g.       <xsd:element name="NamespaceDecl" type="ppx:NamespaceDecl"/> // creates nothing
 //                           <xsd:element name="DataTypeDecl" type="ppx:UserDefinedTypeDecl"/> // creates a class DataTypeDecl that extends UserDefinedTypeDecl
 
-class AddMappedTypes implements GenerateStep {
+class AddMappedTypes implements GeneratorStep {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var processedLibraries = <LibraryWithSource>[];
@@ -53,7 +53,7 @@ class AddMappedTypes implements GenerateStep {
     if (nameValue == null || typeValue == null) {
       return false;
     }
-    var typeName = (typeValue ?? '').split(':').last;
+    var typeName = typeValue.split(':').last;
     if (isSimpleType(typeName)) {
       return false;
     }

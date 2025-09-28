@@ -1,5 +1,23 @@
+import 'package:xml/xml.dart';
+
 import 'package:dart_code/dart_code.dart';
 import 'package:change_case/change_case.dart';
+
+String findTypeName(XmlElement xsdElement) {
+  var name = xsdElement.getAttribute('name');
+  if (name != null && name.isNotEmpty) {
+    return toValidDartNameStartingWitUpperCase(name);
+  }
+
+  var parent = xsdElement.parent;
+  if (parent is XmlElement &&
+      (parent.name.local == 'element' || parent.name.local == 'attribute')) {
+    name = parent.getAttribute('name');
+    return toValidDartNameStartingWitUpperCase(name);
+  }
+
+  throw ArgumentError('It or its parent has no name attribute');
+}
 
 final RegExp _notLettersNumbersUnderscoreOrDollar = RegExp(r'[^\w\$]');
 

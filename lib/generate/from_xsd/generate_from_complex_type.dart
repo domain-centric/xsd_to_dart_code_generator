@@ -2,9 +2,9 @@ import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/post_process.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
 List<CodeModel> generateComplexTypes(Schema schema) {
   final complexTypes = schema.findAllElements(
@@ -82,7 +82,7 @@ Type? findSuperClass({
 }
 
 /// TODO Needs to lookup the proper [libraryUri] based on the [xsdNamespaceUri] when PostProcessing
-class TypeWithXsdNameSpaceUri extends Type implements PostProcess {
+class TypeWithXsdNameSpaceUri extends Type {
   final String xsdNamespaceUri;
   TypeWithXsdNameSpaceUri(
     super.name, {

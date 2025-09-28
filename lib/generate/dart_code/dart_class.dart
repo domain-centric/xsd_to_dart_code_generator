@@ -1,10 +1,9 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/post_process.dart';
 
 /// This class is a placeholder for a class that needs to be post-processed
 /// to add the correct superclass and constructor.
-class ClassToBePostProcessed extends Class implements PostProcess {
+class ClassToBePostProcessed extends Class {
   /// the element that created this class
   final XmlElement xsdSource;
   ClassToBePostProcessed(

@@ -2,8 +2,9 @@ import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
 List<CodeModel> generateSimpleTypes(Schema schema) {
   final simpleTypes = schema.findAllElements(

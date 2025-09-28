@@ -2,9 +2,9 @@ import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/generate_step/generator_step.dart';
+import 'package:xsd_to_dart_code_generator/generate/generate_step/generator.dart';
 
-class AddChoiceInterfaces implements GenerateStep {
+class AddChoiceInterfaces implements GeneratorStep {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var processedLibraries = <LibraryWithSource>[];

@@ -60,8 +60,3 @@ Type? convertXsdTypeToDartType(String xsdType, {required bool isNullable}) {
       return null;
   }
 }
-
-// FIXME: remove
-// String? generateDartListTypedef(String simpleTypeName, String itemType) {
-//   return "typedef $simpleTypeName = List<${convertXsdTypeToDartType(itemType, isNullable: false)}>;\n";
-// }

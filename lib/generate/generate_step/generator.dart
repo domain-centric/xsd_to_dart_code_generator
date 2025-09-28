@@ -1,19 +1,22 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/generate_step/add_choice_interfaces.dart';
+import 'package:xsd_to_dart_code_generator/generate/generate_step/add_library_for_each_xsd_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/generate_step/add_mapped_types.dart';
 import 'package:xsd_to_dart_code_generator/generate/generate_step/log_result.dart';
-import 'package:xsd_to_dart_code_generator/generate/generate_step/write_result_to_file.dart';
 import 'package:xsd_to_dart_code_generator/output_path_converter.dart';
 
-abstract class GenerateStep {
+abstract class GeneratorStep {
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries);
 }
 
-class CodeGenerator extends DelegatingList<GenerateStep>
-    implements GenerateStep {
-  CodeGenerator(OutputPathConverter outputPathConverter)
+class CodeGenerator extends DelegatingList<GeneratorStep>
+    implements GeneratorStep {
+  CodeGenerator(Directory xsdDirectory, OutputPathConverter outputPathConverter)
     : super([
+        AddLibraryForEachXsdFile(xsdDirectory),
         //TODO AddClassesFromComplexTypes
         //TODO AddClassesFromSimpleTypes
         AddChoiceInterfaces(),

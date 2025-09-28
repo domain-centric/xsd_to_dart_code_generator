@@ -1,14 +1,39 @@
 import 'dart:io';
 
 import 'package:dart_code/dart_code.dart';
-import 'package:xml/xml.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_name.dart';
+import 'package:xsd_to_dart_code_generator/generate/generate_step/generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_typedef.dart';
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_complex_type.dart';
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_simple_type.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
+
+class AddLibraryForEachXsdFile implements GeneratorStep {
+  final Directory xsdDirectory;
+  AddLibraryForEachXsdFile(this.xsdDirectory);
+
+  @override
+  List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
+    List<File> xsdFiles = xsdDirectory
+        .listSync(recursive: false)
+        .whereType<File>()
+        .where((file) => file.path.endsWith('.xsd'))
+        .toList();
+
+    var libraries = <LibraryWithSource>[];
+
+    for (var xsdFile in xsdFiles) {
+      var library = generateFromFile(xsdFile);
+
+      if (library != null) {
+        libraries.add(library);
+      }
+    }
+    return libraries;
+  }
+}
 
 /// Converts a xsd file to a Library (from the dart_code package)
 /// Strategy:
@@ -46,60 +71,4 @@ LibraryWithSource? generateFromFile(File xsdSourceFile) {
     );
     return null;
   }
-}
-
-const xsdNamespaceUri = 'http://www.w3.org/2001/XMLSchema';
-
-/// represents a [Xml Schema Definition](https://en.wikipedia.org/wiki/XML_Schema_(W3C))
-class Schema extends XmlElement {
-  factory Schema.fromFile(File xsdFile) {
-    var xmlString = xsdFile.readAsStringSync();
-    var document = XmlDocument.parse(xmlString);
-    return Schema(document);
-  }
-
-  factory Schema(XmlDocument xsdDocument) {
-    XmlElement? element = xsdDocument
-        .findElements("schema", namespace: xsdNamespaceUri)
-        .firstOrNull;
-
-    if (element == null) {
-      throw ArgumentError("No schema element found in XSD document");
-    }
-    return Schema.fromElement(element);
-  }
-
-  Schema.fromElement(XmlElement schema)
-    : super(
-        schema.name.copy(),
-        List<XmlAttribute>.from(schema.attributes.map((a) => a.copy())),
-        List<XmlNode>.from(schema.children.map((c) => c.copy())),
-        schema.isSelfClosing,
-      );
-
-  String? findNameSpaceUri(String nameSpacePrefixToFind) {
-    for (var attribute in attributes) {
-      if (attribute.name.prefix == 'xmlns' &&
-          attribute.name.local == nameSpacePrefixToFind) {
-        return attribute.value;
-      }
-    }
-    return null;
-  }
-}
-
-String findTypeName(XmlElement xsdElement) {
-  var name = xsdElement.getAttribute('name');
-  if (name != null && name.isNotEmpty) {
-    return toValidDartNameStartingWitUpperCase(name);
-  }
-
-  var parent = xsdElement.parent;
-  if (parent is XmlElement &&
-      (parent.name.local == 'element' || parent.name.local == 'attribute')) {
-    name = parent.getAttribute('name');
-    return toValidDartNameStartingWitUpperCase(name);
-  }
-
-  throw ArgumentError('It or its parent has no name attribute');
 }

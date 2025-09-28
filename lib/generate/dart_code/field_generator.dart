@@ -1,11 +1,10 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_name.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_doc_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/post_process.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
 List<Field> generateFieldsFromXsdElement({
   required Schema schema,
@@ -175,7 +174,7 @@ Type? createTypeForElement(Schema schema, XmlElement xsd) {
 
 /// A reference to another (to be) generated class or generated enum
 /// [libraryUri] to be defined during post processing
-class XsdReferenceType extends Type implements PostProcess {
+class XsdReferenceType extends Type {
   final XmlElement xsdElement;
   final String xsdNamespaceUri;
 
@@ -264,7 +263,7 @@ bool _isNullable(XmlElement element) {
       element.getAttribute("use") == "optional";
 }
 
-class XsdChoiceType extends Type implements PostProcess {
+class XsdChoiceType extends Type {
   final List<XmlElement> elementsThatImplementThisType;
   XsdChoiceType(super.name, this.elementsThatImplementThisType);
 }

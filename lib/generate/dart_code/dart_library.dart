@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_typedef.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 
 /// Represents a [Library] containing optional [DocComment]s, [Annotation]s, [DartFunction]s and [Class]es
 /// See: [https://www.tutorialspoint.com/dart_programming/dart_programming_libraries.htm#:~:text=A%20library%20in%20a%20programming,typedefs%2C%20properties%2C%20and%20exceptions.]

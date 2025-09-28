@@ -1,6 +1,6 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_file.dart';
+import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 
 List<DocComment>? generateDartDocFromXsdElement(XmlElement element) {
   var annotation = element
