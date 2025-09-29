@@ -12,7 +12,7 @@ import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 // e.g.       <xsd:element name="NamespaceDecl" type="ppx:NamespaceDecl"/> // creates nothing
 //                           <xsd:element name="DataTypeDecl" type="ppx:UserDefinedTypeDecl"/> // creates a class DataTypeDecl that extends UserDefinedTypeDecl
 
-class AddMappedTypes implements GeneratorStage {
+class AddClassesForMappedTypes implements GeneratorStage {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var processedLibraries = <LibraryWithSource>[];

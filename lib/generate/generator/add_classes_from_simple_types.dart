@@ -1,29 +1,47 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_typedef.dart';
+import 'package:xsd_to_dart_code_generator/generate/generator/generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
-List<CodeModel> generateSimpleTypes(Schema schema) {
-  final simpleTypes = schema.findAllElements(
-    'simpleType',
-    namespace: xsdNamespaceUri,
-  );
+class AddClassesFromSimpleTypes extends GeneratorStage {
+  @override
+  List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
+    var newLibraries = <LibraryWithSource>[];
+    for (var library in libraries) {
+      var schema = library.schema;
+      final simpleTypes = schema.findAllElements(
+        'simpleType',
+        namespace: xsdNamespaceUri,
+      );
 
-  final typeDefinitions = <CodeModel>[];
-  for (var simpleType in simpleTypes) {
-    var typeDefinition = generate(simpleType);
-    if (typeDefinition != null) {
-      typeDefinitions.add(typeDefinition);
+      final typeDeclarations = <CodeModel>[];
+      for (var simpleType in simpleTypes) {
+        var typeDefinition = generateFromSimpleType(simpleType);
+        if (typeDefinition != null) {
+          typeDeclarations.add(typeDefinition);
+        }
+      }
+      var newLibrary = library.copyWith(
+        classes: [
+          ...library.classes ?? [],
+          ...typeDeclarations.whereType<Class>(),
+        ],
+        enums: typeDeclarations.whereType<Enumeration>().toList(),
+        typeDefs: typeDeclarations.whereType<TypeDef>().toList(),
+      );
+      newLibraries.add(newLibrary);
     }
+    return newLibraries;
   }
-
-  return typeDefinitions;
 }
 
-CodeModel? generate(XmlElement simpleType) {
+CodeModel? generateFromSimpleType(XmlElement simpleType) {
   if (isInsideOtherSimpleType(simpleType)) {
     // e.g. when inside a union ignore for now
     return null;
@@ -77,6 +95,7 @@ CodeModel? generate(XmlElement simpleType) {
   if (list != null) {
     var itemType = list.getAttribute("itemType")?.split(":").last;
     if (itemType == null) return null;
+    //TODO must return a TYPEDEF
     return Statement([
       Code(
         'typedef $typeName = '
