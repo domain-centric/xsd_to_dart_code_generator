@@ -2,15 +2,14 @@ import 'dart:io';
 
 import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
-import 'package:xsd_to_dart_code_generator/generate/generate_step/generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/generator/generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_typedef.dart';
-import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_complex_type.dart';
 import 'package:xsd_to_dart_code_generator/generate/from_xsd/generate_from_simple_type.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 
-class AddLibraryForEachXsdFile implements GeneratorStep {
+class AddLibraryForEachXsdFile implements GeneratorStage {
   final Directory xsdDirectory;
   AddLibraryForEachXsdFile(this.xsdDirectory);
 
@@ -55,7 +54,6 @@ LibraryWithSource? generateFromFile(File xsdSourceFile) {
     var schema = Schema.fromFile(xsdSourceFile);
 
     var typeDeclarations = <CodeModel>[];
-    typeDeclarations.addAll(generateComplexTypes(schema));
     typeDeclarations.addAll(generateSimpleTypes(schema));
 
     return LibraryWithSource(

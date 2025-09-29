@@ -1,30 +1,55 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/generator/generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
-List<CodeModel> generateComplexTypes(Schema schema) {
-  final complexTypes = schema.findAllElements(
-    'complexType',
-    namespace: xsdNamespaceUri,
-  );
+class AddClassesFromComplexTypes extends GeneratorStage {
+  /// Converts xsd:complexType elements from the libraries XmlSchema to Dart classes
+  /// Strategy:
+  ///
+  /// | XSD Construct             | Dart Equivalent                           |
+  /// |---------------------------|-------------------------------------------|
+  /// | `xsd:complexType`         | Dart class                                |
+  /// | `xsd:element`             | Dart field                                |
+  /// | `xsd:attribute`           | Dart field                                |
+  /// | `xsd:sequence`            | Ordered fields                            |
+  /// | `minOccurs="0"`           | Optional field (nullable)                 |
+  /// | `maxOccurs="unbounded"`   | `List<T>`                                 |
+  /// | `xsd:extension`           | Dart class inheritance (`extends`)        |
+  @override
+  List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
+    var newLibraries = <LibraryWithSource>[];
+    for (var library in libraries) {
+      var schema = library.schema;
+      final complexTypes = schema.findAllElements(
+        'complexType',
+        namespace: xsdNamespaceUri,
+      );
 
-  final typeDefinitions = <CodeModel>[];
+      final newClasses = <ClassToBePostProcessed>[];
 
-  for (final complexType in complexTypes) {
-    var typeDefinition = generate(schema, complexType);
-    if (typeDefinition != null) {
-      typeDefinitions.add(typeDefinition);
+      for (final complexType in complexTypes) {
+        var newClass = generateFromComplexType(schema, complexType);
+        if (newClass != null) {
+          newClasses.add(newClass);
+        }
+      }
+
+      newLibraries.add(library.copyWith(classes: newClasses));
     }
+    return newLibraries;
   }
-
-  return typeDefinitions;
 }
 
-CodeModel? generate(Schema schema, XmlElement complexType) {
+ClassToBePostProcessed? generateFromComplexType(
+  Schema schema,
+  XmlElement complexType,
+) {
   String typeName;
   try {
     typeName = findTypeName(complexType);

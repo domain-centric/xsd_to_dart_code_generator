@@ -2,9 +2,9 @@ import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_class.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/generate_step/generator.dart';
+import 'package:xsd_to_dart_code_generator/generate/generator/generator.dart';
 
-class AddChoiceInterfaces implements GeneratorStep {
+class AddChoiceInterfaces implements GeneratorStage {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var processedLibraries = <LibraryWithSource>[];
@@ -24,12 +24,13 @@ class AddChoiceInterfaces implements GeneratorStep {
     return processedLibraries;
   }
 
-  Class createInterface(XsdChoiceType xsdChoiceType) {
+  ClassToBePostProcessed createInterface(XsdChoiceType xsdChoiceType) {
     var owners = xsdChoiceType.elementsThatImplementThisType.map(
       (c) => c.getAttribute('name'),
     );
-    var interface = Class(
+    var interface = ClassToBePostProcessed(
       xsdChoiceType.name,
+      xsdSource: xsdChoiceType.xsdSource,
       abstract: true,
       docComments: [
         DocComment.fromString('Common interface for: ${owners.join(', ')}'),

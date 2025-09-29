@@ -28,6 +28,7 @@ List<Field> generateFieldsFromXsdElement({
 
       var genericType = XsdChoiceType(
         '${typeName}Item',
+        nestedChoice,
         elementsThatImplementThisType,
       );
       return [Field(name, type: Type.ofList(genericType: genericType))];
@@ -36,6 +37,7 @@ List<Field> generateFieldsFromXsdElement({
 
       var genericType = XsdChoiceType(
         '${typeName}Item',
+        nestedChoice,
         elementsThatImplementThisType,
       );
       return [Field(name, type: genericType)];
@@ -264,8 +266,9 @@ bool _isNullable(XmlElement element) {
 }
 
 class XsdChoiceType extends Type {
+  final XmlElement xsdSource;
   final List<XmlElement> elementsThatImplementThisType;
-  XsdChoiceType(super.name, this.elementsThatImplementThisType);
+  XsdChoiceType(super.name, this.xsdSource, this.elementsThatImplementThisType);
 }
 
 /// finds within [parent] all xds.elements, including xsd.group references
