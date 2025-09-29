@@ -8,6 +8,7 @@ import 'package:xsd_to_dart_code_generator/generate/generator/add_classes_from_s
 import 'package:xsd_to_dart_code_generator/generate/generator/add_library_for_each_xsd_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/add_classes_for_mapped_types.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/log_result.dart';
+import 'package:xsd_to_dart_code_generator/generate/generator/make_member_names_unique.dart';
 import 'package:xsd_to_dart_code_generator/output_path_converter.dart';
 
 abstract class GeneratorStage {
@@ -25,7 +26,7 @@ class CodeGenerator extends DelegatingList<GeneratorStage>
         AddClassesFromSimpleTypes(),
         AddClassesForMappedTypes(),
         AddChoiceInterfaces(),
-        // TODO uniqueNames
+        MakeMemberNamesUnique(),
 
         //TODO AddConstructors
         //TODO AddXmlConverterLibraties

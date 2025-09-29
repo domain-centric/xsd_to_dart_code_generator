@@ -15,14 +15,15 @@ import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 class AddClassesForMappedTypes implements GeneratorStage {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
-    var processedLibraries = <LibraryWithSource>[];
+    var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
       var classes = library.classes ?? [];
-      var newClasses = <ClassToBePostProcessed>{};
+      var newClasses = <ClassToBePostProcessed>[];
       for (var clasz in classes) {
         var fields = clasz.fields ?? [];
         for (var field in fields) {
           if (isChoiceField(field)) {
+            //TODO remove when never enters here?
             var mappedClasses = createChoiceMappedClasses(
               library.schema,
               field,
@@ -37,14 +38,11 @@ class AddClassesForMappedTypes implements GeneratorStage {
           }
         }
       }
-      print(newClasses.map((c) => c.name).join(', '));
 
-      classes.addAll(newClasses);
-
-      var newLibrary = library.copyWith(classes: classes);
-      processedLibraries.add(newLibrary);
+      var newLibrary = library.copyWith(classes: [...classes, ...newClasses]);
+      newLibraries.add(newLibrary);
     }
-    return processedLibraries;
+    return newLibraries;
   }
 
   bool isMapped(XmlElement xsdElement) {
@@ -56,9 +54,6 @@ class AddClassesForMappedTypes implements GeneratorStage {
     var typeName = typeValue.split(':').last;
     if (isSimpleType(typeName)) {
       return false;
-    }
-    if (nameValue == 'DataTypeDecl') {
-      print('!!!');
     }
     var found = nameValue != typeName;
     return found;
