@@ -92,10 +92,9 @@ packages:
   dart_code:
     dependency: "direct main"
     description:
-      name: dart_code
-      sha256: "187fd6f55d5fd2310ffbbaaffe9ea6c4fc62b7dcc70ab6f91a0f58ffd5dfa100"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../dart_code"
+      relative: true
+    source: path
     version: "0.2.2"
   dart_style:
     dependency: transitive
@@ -189,10 +188,10 @@ packages:
     dependency: transitive
     description:
       name: meta
-      sha256: "23f08335362185a5ea2ad3a4e597f1375e78bce8a040df5c600c8d3552ef2394"
+      sha256: e3641ec5d63ebf0d9b41bd43201a66e3fc79a65db5f61fc181f04cd27aab950c
       url: "https://pub.dev"
     source: hosted
-    version: "1.17.0"
+    version: "1.16.0"
   mime:
     dependency: transitive
     description:
@@ -233,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  plural_noun:
+    dependency: "direct main"
+    description:
+      name: plural_noun
+      sha256: b048daa8725369aadf39ab1da07f15e13490bae5418035e62a528854d153baf8
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   pool:
     dependency: transitive
     description:

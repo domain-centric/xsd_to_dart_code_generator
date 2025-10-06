@@ -12,37 +12,42 @@ import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 // e.g.       <xsd:element name="NamespaceDecl" type="ppx:NamespaceDecl"/> // creates nothing
 //                           <xsd:element name="DataTypeDecl" type="ppx:UserDefinedTypeDecl"/> // creates a class DataTypeDecl that extends UserDefinedTypeDecl
 
-class AddClassesForMappedTypes implements GeneratorStage {
+class AddClassesForMappedElements implements GeneratorStage {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
       var classes = library.classes ?? [];
-      var newClasses = <ClassToBePostProcessed>[];
-      for (var clasz in classes) {
-        var fields = clasz.fields ?? [];
-        for (var field in fields) {
-          if (isChoiceField(field)) {
-            //TODO remove when never enters here?
-            var mappedClasses = createChoiceMappedClasses(
-              library.schema,
-              field,
-            );
-            newClasses.addAll(mappedClasses);
-            continue;
-          }
-          var element = findElement(field);
-          if (element != null && isMapped(element)) {
-            var mappedClass = createMappedClass(library.schema, element);
-            newClasses.add(mappedClass);
-          }
-        }
-      }
-
+      List<ClassToBePostProcessed> newClasses =
+          generateClassesForMappedElements(classes, library);
       var newLibrary = library.copyWith(classes: [...classes, ...newClasses]);
       newLibraries.add(newLibrary);
     }
     return newLibraries;
+  }
+
+  List<ClassToBePostProcessed> generateClassesForMappedElements(
+    List<Class> classes,
+    LibraryWithSource library,
+  ) {
+    var newClasses = <ClassToBePostProcessed>[];
+    for (var clasz in classes) {
+      var fields = clasz.fields ?? [];
+      for (var field in fields) {
+        if (isChoiceField(field)) {
+          //TODO remove when never enters here?
+          var mappedClasses = createChoiceMappedClasses(library.schema, field);
+          newClasses.addAll(mappedClasses);
+          continue;
+        }
+        var element = findElement(field);
+        if (element != null && isMapped(element)) {
+          var mappedClass = createMappedClass(library.schema, element);
+          newClasses.add(mappedClass);
+        }
+      }
+    }
+    return newClasses;
   }
 
   bool isMapped(XmlElement xsdElement) {
@@ -72,7 +77,7 @@ class AddClassesForMappedTypes implements GeneratorStage {
     var superClass = XsdReferenceType.fromXsdElement(schema, xsdElement);
     return ClassToBePostProcessed(
       className,
-      xsdSource: xsdElement,
+      xsdSources: [xsdElement],
       superClass: superClass,
     );
   }

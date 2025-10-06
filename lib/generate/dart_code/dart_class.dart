@@ -5,7 +5,7 @@ import 'package:xml/xml.dart';
 /// to add the correct superclass and constructor.
 class ClassToBePostProcessed extends Class {
   /// the element that created this class
-  final XmlElement xsdSource;
+  final List<XmlElement> xsdSources;
   ClassToBePostProcessed(
     super.name, {
     super.docComments,
@@ -17,8 +17,12 @@ class ClassToBePostProcessed extends Class {
     super.fields,
     super.constructors,
     super.methods,
-    required this.xsdSource,
-  });
+    required this.xsdSources,
+  }) {
+    if (xsdSources.isEmpty) {
+      throw ArgumentError('Must contain at least one source', 'xsdSources');
+    }
+  }
 
   ClassToBePostProcessed copyWith({
     String? name,
@@ -31,7 +35,7 @@ class ClassToBePostProcessed extends Class {
     List<Field>? fields,
     List<Constructor>? constructors,
     List<Method>? methods,
-    XmlElement? xsdSource,
+    List<XmlElement>? xsdSources,
   }) {
     return ClassToBePostProcessed(
       name ?? this.name.toString(),
@@ -44,7 +48,7 @@ class ClassToBePostProcessed extends Class {
       fields: fields ?? this.fields,
       constructors: constructors ?? this.constructors,
       methods: methods ?? this.methods,
-      xsdSource: xsdSource ?? this.xsdSource,
+      xsdSources: xsdSources ?? this.xsdSources,
     );
   }
 
@@ -53,9 +57,23 @@ class ClassToBePostProcessed extends Class {
     if (identical(this, other)) return true;
     return other is ClassToBePostProcessed &&
         name == other.name &&
-        xsdSource == other.xsdSource;
+        xsdSources == other.xsdSources;
   }
 
   @override
-  int get hashCode => Object.hash(name, xsdSource);
+  int get hashCode => Object.hash(name, xsdSources);
+}
+
+class ClassThatNeedsNoConstructor extends ClassToBePostProcessed {
+  ClassThatNeedsNoConstructor(
+    super.name, {
+    super.docComments,
+    super.annotations,
+    super.abstract,
+    super.implements,
+    super.mixins,
+    super.fields,
+    super.methods,
+    required super.xsdSources,
+  });
 }

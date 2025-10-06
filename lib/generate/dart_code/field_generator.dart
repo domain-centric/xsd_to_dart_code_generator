@@ -5,6 +5,7 @@ import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_doc_generator
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
+import 'package:plural_noun/plural_noun.dart';
 
 List<Field> generateFieldsFromXsdElement({
   required Schema schema,
@@ -31,7 +32,13 @@ List<Field> generateFieldsFromXsdElement({
         nestedChoice,
         elementsThatImplementThisType,
       );
-      return [Field(name, type: Type.ofList(genericType: genericType))];
+      return [
+        XsdElementField(
+          name,
+          xsdElement: nestedChoice,
+          type: Type.ofList(genericType: genericType),
+        ),
+      ];
     } else {
       name = name ?? 'item';
 
@@ -40,7 +47,9 @@ List<Field> generateFieldsFromXsdElement({
         nestedChoice,
         elementsThatImplementThisType,
       );
-      return [Field(name, type: genericType)];
+      return [
+        XsdElementField(name, xsdElement: nestedChoice, type: genericType),
+      ];
     }
   }
 
@@ -104,10 +113,16 @@ Field? convertToField(Schema schema, XmlElement xsd) {
   var xmlName = xsd.getAttribute("name")!;
   String fieldName = toValidDartNameStartingWitLowerCase(xmlName);
   var type = createTypeForElement(schema, xsd);
+
   if (type == null) {
     log.warning('Dart type could not be determined for: $xsd');
     return null;
   }
+
+  if (type.name == 'List') {
+    fieldName = convertToPluralNoun(fieldName);
+  }
+
   var doc = generateDartDocFromXsdElement(xsd);
   var isElement = xsd.name.local == 'element';
   if (isElement) {
@@ -126,6 +141,28 @@ Field? convertToField(Schema schema, XmlElement xsd) {
   );
 }
 
+final extendedRules = EnglishPluralRuleSet().addIrregularNouns({
+  'vars': 'vars',
+  'var': 'vars',
+});
+
+final PluralEngine pluralEngine = PluralEngine(extendedRules);
+
+String convertToPluralNoun(String fieldName) {
+  var words = splitCamelCase(fieldName);
+  var lastWordToPlural = pluralEngine.convertToPluralNoun(words.last);
+  var newWords = [
+    if (words.length > 1) ...words.sublist(0, words.length - 1),
+    lastWordToPlural,
+  ];
+  return newWords.join();
+}
+
+List<String> splitCamelCase(String input) {
+  final regex = RegExp(r'(?<=[a-z])(?=[A-Z])');
+  return input.split(regex);
+}
+
 /// A [Field] that represents a XsdElement
 class XsdElementField extends Field {
   final XmlElement xsdElement;
@@ -136,7 +173,7 @@ class XsdElementField extends Field {
     super.docComments = const [],
     super.annotations = const [],
     super.static = false,
-    super.modifier = Modifier.var$,
+    super.modifier = Modifier.final$,
     super.type,
     super.value,
     required this.xsdElement,
@@ -153,7 +190,7 @@ class XsdAttributeField extends Field {
     super.docComments = const [],
     super.annotations = const [],
     super.static = false,
-    super.modifier = Modifier.var$,
+    super.modifier = Modifier.final$,
     super.type,
     super.value,
     required this.xsdAttribute,
@@ -219,7 +256,11 @@ Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
       isNullable: isNullable,
     );
     if (type != null) {
-      return type;
+      if (isList) {
+        return Type.ofList(genericType: type, nullable: isNullable);
+      } else {
+        return type;
+      }
     }
   }
 

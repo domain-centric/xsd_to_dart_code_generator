@@ -28,9 +28,9 @@ class AddChoiceInterfaces implements GeneratorStage {
     var owners = xsdChoiceType.elementsThatImplementThisType.map(
       (c) => c.getAttribute('name'),
     );
-    var interface = ClassToBePostProcessed(
+    var interface = ClassThatNeedsNoConstructor(
       xsdChoiceType.name,
-      xsdSource: xsdChoiceType.xsdSource,
+      xsdSources: [xsdChoiceType.xsdSource],
       abstract: true,
       docComments: [
         DocComment.fromString('Common interface for: ${owners.join(', ')}'),

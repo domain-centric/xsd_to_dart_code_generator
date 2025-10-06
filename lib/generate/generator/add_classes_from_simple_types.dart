@@ -3,41 +3,45 @@ import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_enum.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_library.dart';
 import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_simple_type_generator.dart';
-import 'package:xsd_to_dart_code_generator/generate/dart_code/dart_typedef.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
-class AddClassesFromSimpleTypes extends GeneratorStage {
+class AddClassesFromSimpleTypes implements GeneratorStage {
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
-      var schema = library.schema;
-      final simpleTypes = schema.findAllElements(
-        'simpleType',
-        namespace: xsdNamespaceUri,
-      );
-
-      final typeDeclarations = <CodeModel>[];
-      for (var simpleType in simpleTypes) {
-        var typeDefinition = generateFromSimpleType(simpleType);
-        if (typeDefinition != null) {
-          typeDeclarations.add(typeDefinition);
-        }
-      }
+      List<CodeModel> typeDeclarations = generateTypesFromSimpleTypes(library);
       var newLibrary = library.copyWith(
         classes: [
           ...library.classes ?? [],
           ...typeDeclarations.whereType<Class>(),
         ],
-        enums: typeDeclarations.whereType<Enumeration>().toList(),
+        enumerations: typeDeclarations.whereType<Enumeration>().toList(),
         typeDefs: typeDeclarations.whereType<TypeDef>().toList(),
       );
       newLibraries.add(newLibrary);
     }
     return newLibraries;
+  }
+
+  List<CodeModel> generateTypesFromSimpleTypes(LibraryWithSource library) {
+    var schema = library.schema;
+    final simpleTypes = schema.findAllElements(
+      'simpleType',
+      namespace: xsdNamespaceUri,
+    );
+
+    final typeDeclarations = <CodeModel>[];
+    for (var simpleType in simpleTypes) {
+      var typeDefinition = generateFromSimpleType(simpleType);
+      if (typeDefinition != null) {
+        typeDeclarations.add(typeDefinition);
+      }
+    }
+    return typeDeclarations;
   }
 }
 

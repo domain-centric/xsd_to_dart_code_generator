@@ -25,28 +25,37 @@ class AddClassesFromComplexTypes extends GeneratorStage {
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
-      var schema = library.schema;
-      final complexTypes = schema.findAllElements(
-        'complexType',
-        namespace: xsdNamespaceUri,
+      List<ClassToBePostProcessed> newClasses = generateClassesFromComplexTypes(
+        library,
       );
-
-      final newClasses = <ClassToBePostProcessed>[];
-
-      for (final complexType in complexTypes) {
-        var newClass = generateFromComplexType(schema, complexType);
-        if (newClass != null) {
-          newClasses.add(newClass);
-        }
-      }
-
-      newLibraries.add(library.copyWith(classes: newClasses));
+      var newLibrary = library.copyWith(classes: newClasses);
+      newLibraries.add(newLibrary);
     }
     return newLibraries;
   }
+
+  List<ClassToBePostProcessed> generateClassesFromComplexTypes(
+    LibraryWithSource library,
+  ) {
+    var schema = library.schema;
+    final complexTypes = schema.findAllElements(
+      'complexType',
+      namespace: xsdNamespaceUri,
+    );
+
+    final newClasses = <ClassToBePostProcessed>[];
+
+    for (final complexType in complexTypes) {
+      var newClass = generateClassFromComplexType(schema, complexType);
+      if (newClass != null) {
+        newClasses.add(newClass);
+      }
+    }
+    return newClasses;
+  }
 }
 
-ClassToBePostProcessed? generateFromComplexType(
+ClassToBePostProcessed? generateClassFromComplexType(
   Schema schema,
   XmlElement complexType,
 ) {
@@ -74,7 +83,7 @@ ClassToBePostProcessed? generateFromComplexType(
 
   return ClassToBePostProcessed(
     typeName,
-    xsdSource: complexType,
+    xsdSources: [complexType],
     abstract: isAbstract,
     fields: fields,
     superClass: superClass,
@@ -101,19 +110,13 @@ Type? findSuperClass({
   var namespaceUri = findTypeNamespaceUri(schema, base);
   var typeName = base.split(':').last;
   if (namespaceUri != null) {
-    return TypeWithXsdNameSpaceUri(typeName, xsdNamespaceUri: namespaceUri);
+    return XsdReferenceType(
+      typeName,
+      xsdElement: complexType,
+      xsdNamespaceUri: namespaceUri,
+    );
   }
   return Type(typeName);
-}
-
-/// TODO Needs to lookup the proper [libraryUri] based on the [xsdNamespaceUri] when PostProcessing
-class TypeWithXsdNameSpaceUri extends Type {
-  final String xsdNamespaceUri;
-  TypeWithXsdNameSpaceUri(
-    super.name, {
-    super.nullable = false,
-    required this.xsdNamespaceUri,
-  });
 }
 
 String? findTypeNamespaceUri(Schema schema, String base) {

@@ -40,4 +40,6 @@ class Schema extends XmlElement {
     }
     return null;
   }
+
+  late String? targetNameSpaceUri = getAttribute('targetNamespace');
 }
