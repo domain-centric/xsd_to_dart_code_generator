@@ -8,7 +8,11 @@ import 'package:xsd_to_dart_code_generator/generate/logger.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
-class AddClassesFromSimpleTypes implements GeneratorStage {
+class AddTypesFromSimpleTypes implements GeneratorStage {
+  final XsdNamePathToTypeNameMapping nameMapping;
+
+  AddTypesFromSimpleTypes(this.nameMapping);
+
   @override
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var newLibraries = <LibraryWithSource>[];
@@ -36,7 +40,7 @@ class AddClassesFromSimpleTypes implements GeneratorStage {
 
     final typeDeclarations = <CodeModel>[];
     for (var simpleType in simpleTypes) {
-      var typeDefinition = generateFromSimpleType(simpleType);
+      var typeDefinition = generateFromSimpleType(simpleType, nameMapping);
       if (typeDefinition != null) {
         typeDeclarations.add(typeDefinition);
       }
@@ -45,7 +49,10 @@ class AddClassesFromSimpleTypes implements GeneratorStage {
   }
 }
 
-CodeModel? generateFromSimpleType(XmlElement simpleType) {
+CodeModel? generateFromSimpleType(
+  XmlElement simpleType,
+  XsdNamePathToTypeNameMapping nameMapping,
+) {
   if (isInsideOtherSimpleType(simpleType)) {
     // e.g. when inside a union ignore for now
     return null;
@@ -53,7 +60,7 @@ CodeModel? generateFromSimpleType(XmlElement simpleType) {
 
   String typeName;
   try {
-    typeName = findTypeName(simpleType);
+    typeName = findTypeName(simpleType, nameMapping);
   } catch (e) {
     log.warning(
       'Could not find a valid Dart type name. Error: $e For: $simpleType',

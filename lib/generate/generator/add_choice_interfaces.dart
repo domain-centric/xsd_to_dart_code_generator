@@ -24,14 +24,14 @@ class AddChoiceInterfaces implements GeneratorStage {
     return processedLibraries;
   }
 
-  ClassToBePostProcessed createInterface(XsdChoiceType xsdChoiceType) {
+  ClassFromXsd createInterface(TypeFromXsdChoice xsdChoiceType) {
     var owners = xsdChoiceType.elementsThatImplementThisType.map(
       (c) => c.getAttribute('name'),
     );
-    var interface = ClassThatNeedsNoConstructor(
+    var interface = ClassFromXsd(
       xsdChoiceType.name,
-      xsdSources: [xsdChoiceType.xsdSource],
-      abstract: true,
+      mappedXsdElements: [xsdChoiceType.xsdSource],
+      modifier: ClassModifier.abstract_interface,
       docComments: [
         DocComment.fromString('Common interface for: ${owners.join(', ')}'),
       ],
@@ -39,14 +39,14 @@ class AddChoiceInterfaces implements GeneratorStage {
     return interface;
   }
 
-  List<XsdChoiceType> findXsdChoiceTypes(List<Class> classes) {
-    var xsdChoiceTypes = <XsdChoiceType>[];
+  List<TypeFromXsdChoice> findXsdChoiceTypes(List<Class> classes) {
+    var xsdChoiceTypes = <TypeFromXsdChoice>[];
     for (var clasz in classes) {
       var fields = (clasz.fields ?? []);
       var foundTypes = fields
           .map((f) => findAllTypes(f.type))
           .expand((l) => l)
-          .whereType<XsdChoiceType>();
+          .whereType<TypeFromXsdChoice>();
       xsdChoiceTypes.addAll(foundTypes);
     }
     return xsdChoiceTypes;
@@ -55,7 +55,7 @@ class AddChoiceInterfaces implements GeneratorStage {
 
 void letClassesImplementIfNeeded(
   List<Class> classes,
-  XsdChoiceType xsdChoiceType,
+  TypeFromXsdChoice xsdChoiceType,
 ) {
   for (var clasz in classes) {
     if (isClassThatNeedsToImplement(clasz, xsdChoiceType)) {
@@ -66,17 +66,15 @@ void letClassesImplementIfNeeded(
   }
 }
 
-ClassToBePostProcessed letClassImplement(
-  Class clasz,
-  XsdChoiceType xsdChoiceType,
-) => (clasz as ClassToBePostProcessed).copyWith(
-  implements: [
-    if (clasz.implements != null) ...clasz.implements!,
-    xsdChoiceType,
-  ],
-);
+ClassFromXsd letClassImplement(Class clasz, TypeFromXsdChoice xsdChoiceType) =>
+    (clasz as ClassFromXsd).copyWith(
+      implements: [
+        if (clasz.implements != null) ...clasz.implements!,
+        xsdChoiceType,
+      ],
+    );
 
-bool isClassThatNeedsToImplement(Class clasz, XsdChoiceType xsdChoiceType) {
+bool isClassThatNeedsToImplement(Class clasz, TypeFromXsdChoice xsdChoiceType) {
   var classImplements = (clasz.implements ?? []).map((type) => type.name);
   if (classImplements.contains(xsdChoiceType.name)) {
     // already implemented

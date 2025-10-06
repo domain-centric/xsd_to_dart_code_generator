@@ -9,6 +9,10 @@ import 'package:xsd_to_dart_code_generator/generate/xsd/schema.dart';
 import 'package:xsd_to_dart_code_generator/generate/xsd/type_name.dart';
 
 class AddClassesFromComplexTypes extends GeneratorStage {
+  final XsdNamePathToTypeNameMapping nameMapping;
+
+  AddClassesFromComplexTypes(this.nameMapping);
+
   /// Converts xsd:complexType elements from the libraries XmlSchema to Dart classes
   /// Strategy:
   ///
@@ -25,16 +29,14 @@ class AddClassesFromComplexTypes extends GeneratorStage {
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
-      List<ClassToBePostProcessed> newClasses = generateClassesFromComplexTypes(
-        library,
-      );
+      List<ClassFromXsd> newClasses = generateClassesFromComplexTypes(library);
       var newLibrary = library.copyWith(classes: newClasses);
       newLibraries.add(newLibrary);
     }
     return newLibraries;
   }
 
-  List<ClassToBePostProcessed> generateClassesFromComplexTypes(
+  List<ClassFromXsd> generateClassesFromComplexTypes(
     LibraryWithSource library,
   ) {
     var schema = library.schema;
@@ -43,10 +45,14 @@ class AddClassesFromComplexTypes extends GeneratorStage {
       namespace: xsdNamespaceUri,
     );
 
-    final newClasses = <ClassToBePostProcessed>[];
+    final newClasses = <ClassFromXsd>[];
 
     for (final complexType in complexTypes) {
-      var newClass = generateClassFromComplexType(schema, complexType);
+      var newClass = generateClassFromComplexType(
+        schema,
+        complexType,
+        nameMapping,
+      );
       if (newClass != null) {
         newClasses.add(newClass);
       }
@@ -55,13 +61,14 @@ class AddClassesFromComplexTypes extends GeneratorStage {
   }
 }
 
-ClassToBePostProcessed? generateClassFromComplexType(
+ClassFromXsd? generateClassFromComplexType(
   Schema schema,
   XmlElement complexType,
+  XsdNamePathToTypeNameMapping nameMapping,
 ) {
   String typeName;
   try {
-    typeName = findTypeName(complexType);
+    typeName = findTypeName(complexType, nameMapping);
   } catch (e) {
     log.warning(
       'Could not find a valid Dart type name. Error: $e For: $complexType',
@@ -73,25 +80,26 @@ ClassToBePostProcessed? generateClassFromComplexType(
 
   var superClass = findSuperClass(schema: schema, complexType: complexType);
 
-  var isAbstract = _isAbstract(complexType);
-
   List<Field> fields = generateFieldsFromXsdElement(
     schema: schema,
+    nameMapping: nameMapping,
     typeName: typeName,
     complexType: complexType,
   );
 
-  return ClassToBePostProcessed(
+  return ClassFromXsd(
     typeName,
-    xsdSources: [complexType],
-    abstract: isAbstract,
+    mappedXsdElements: [complexType],
+    modifier: _classModifier(complexType),
     fields: fields,
     superClass: superClass,
   );
 }
 
-bool _isAbstract(XmlElement complexType) =>
-    complexType.getAttribute('abstract') == 'true';
+ClassModifier? _classModifier(XmlElement complexType) =>
+    complexType.getAttribute('abstract') == 'true'
+    ? ClassModifier.abstract
+    : null;
 
 Type? findSuperClass({
   required Schema schema,

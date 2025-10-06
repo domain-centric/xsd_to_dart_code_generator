@@ -3,20 +3,39 @@ import 'package:xml/xml.dart';
 import 'package:dart_code/dart_code.dart';
 import 'package:change_case/change_case.dart';
 
-String findTypeName(XmlElement xsdElement) {
-  var name = xsdElement.getAttribute('name');
-  if (name != null && name.isNotEmpty) {
+String findTypeName(
+  XmlElement xsdElement,
+  XsdNamePathToTypeNameMapping nameMapping,
+) {
+  var namePathList = findXsdNamePath(xsdElement);
+  if (namePathList.isEmpty) {
+    throw ArgumentError('Xsd element or its parents have no name attribute');
+  }
+
+  var namePath = namePathList.join('.');
+  if (nameMapping.keys.contains(namePath)) {
+    var name = nameMapping[namePath];
     return toValidDartNameStartingWitUpperCase(name);
   }
 
-  var parent = xsdElement.parent;
-  if (parent is XmlElement &&
-      (parent.name.local == 'element' || parent.name.local == 'attribute')) {
-    name = parent.getAttribute('name');
-    return toValidDartNameStartingWitUpperCase(name);
-  }
+  var name = namePathList.last;
+  return toValidDartNameStartingWitUpperCase(name);
+}
 
-  throw ArgumentError('It or its parent has no name attribute');
+List<String> findXsdNamePath(
+  XmlElement element, [
+  List<String>? foundXsdNames,
+]) {
+  foundXsdNames = foundXsdNames ?? [];
+  var nameAttribute = element.getAttribute('name');
+  if (nameAttribute != null) {
+    foundXsdNames.insert(0, nameAttribute);
+  }
+  if (element.parentElement == null) {
+    return foundXsdNames;
+  }
+  var parent = element.parentElement!;
+  return findXsdNamePath(parent, foundXsdNames);
 }
 
 final RegExp _notLettersNumbersUnderscoreOrDollar = RegExp(r'[^\w\$]');
@@ -53,3 +72,7 @@ String toValidDartNameStartingWitUpperCase(String? name) {
   /// throws an error when still invalid
   return IdentifierStartingWithUpperCase(candidate).toString();
 }
+
+/// Allows the developer to map names, e.g.:
+/// {'ParameterSet.OutputVars.Variable': 'OutputVariable'}
+typedef XsdNamePathToTypeNameMapping = Map<String, String>;

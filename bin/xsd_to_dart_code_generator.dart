@@ -14,9 +14,18 @@ void main(List<String> arguments) {
       'IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0': 'sysmac_extension',
     },
   );
+  var nameMapping = <String, String>{
+    'EnumTypeSpec.Enumerator': 'EnumeratorWithoutValue',
+    'ParameterSet.InoutVars.Variable': 'ParameterInoutVariable',
+    'ParameterSet.OutputVars.Variable': 'ParameterOutputVariable',
+    'ParameterSet.InputVars.Variable': 'ParameterInputVariable',
+    'Value.ArrayValue.Value': 'ArrayValueItem',
+    'Value.StructValue.Value': 'StructValueItem',
+  };
   libraries = CodeGenerator(
-    xsdDirectory,
-    outputPathConverter,
+    xsdDirectory: xsdDirectory,
+    outputPathConverter: outputPathConverter,
+    nameMapping: nameMapping,
   ).generate(libraries);
 
   exit(0);

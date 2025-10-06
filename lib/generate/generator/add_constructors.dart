@@ -18,13 +18,13 @@ class AddConstructors implements GeneratorStage {
     return newLibraries;
   }
 
-  List<ClassToBePostProcessed> generateClassesWithConstructors(
+  List<ClassFromXsd> generateClassesWithConstructors(
     List<LibraryWithSource> libraries,
     LibraryWithSource library,
   ) {
-    var newClasses = <ClassToBePostProcessed>[];
+    var newClasses = <ClassFromXsd>[];
     for (var clasz in library.classes ?? []) {
-      if (clasz is ClassThatNeedsNoConstructor) {
+      if (clasz.modifier == ClassModifier.abstract_interface) {
         // add as is
         newClasses.add(clasz);
       } else {
@@ -36,9 +36,9 @@ class AddConstructors implements GeneratorStage {
     return newClasses;
   }
 
-  ClassToBePostProcessed generateClassWithConstructor(
+  ClassFromXsd generateClassWithConstructor(
     List<LibraryWithSource> libraries,
-    ClassToBePostProcessed clasz,
+    ClassFromXsd clasz,
   ) {
     //TODO remove?
     // if (clasz.abstract != null && clasz.abstract == true) {
@@ -49,8 +49,8 @@ class AddConstructors implements GeneratorStage {
     return clasz.copyWith(constructors: [constructor]);
   }
 
-  List<ClassToBePostProcessed> findSuperClasses(
-    ClassToBePostProcessed clasz,
+  List<ClassFromXsd> findSuperClasses(
+    ClassFromXsd clasz,
     List<LibraryWithSource> libraries,
   ) {
     if (clasz.superClass == null) {
@@ -63,8 +63,8 @@ class AddConstructors implements GeneratorStage {
     return findSuperClassesRecursively([superClass], libraries);
   }
 
-  List<ClassToBePostProcessed> findSuperClassesRecursively(
-    List<ClassToBePostProcessed> foundSuperClasses,
+  List<ClassFromXsd> findSuperClassesRecursively(
+    List<ClassFromXsd> foundSuperClasses,
     List<LibraryWithSource> libraries,
   ) {
     var last = foundSuperClasses.last;
@@ -76,7 +76,7 @@ class AddConstructors implements GeneratorStage {
     return findSuperClassesRecursively(foundSuperClasses, libraries);
   }
 
-  ClassToBePostProcessed findClass(
+  ClassFromXsd findClass(
     XsdReferenceType classToFind,
     List<LibraryWithSource> libraries,
   ) {
@@ -88,9 +88,9 @@ class AddConstructors implements GeneratorStage {
     if (foundClass == null) {
       log.warning('Could not find class: ${classToFind.name}');
       return library.classes?.first
-          as ClassToBePostProcessed; //FIXME remove this temporary fix
+          as ClassFromXsd; //FIXME remove this temporary fix
     }
-    return foundClass as ClassToBePostProcessed;
+    return foundClass as ClassFromXsd;
   }
 
   LibraryWithSource findLibrary(
@@ -100,7 +100,7 @@ class AddConstructors implements GeneratorStage {
 
   Constructor createConstructor(
     List<LibraryWithSource> libraries,
-    ClassToBePostProcessed clasz,
+    ClassFromXsd clasz,
   ) {
     var constructParameters = createConstructorParameters(clasz, libraries);
     return Constructor(
@@ -110,7 +110,7 @@ class AddConstructors implements GeneratorStage {
   }
 
   ConstructorParameters createConstructorParameters(
-    ClassToBePostProcessed clasz,
+    ClassFromXsd clasz,
     List<LibraryWithSource> libraries,
   ) {
     var localFields = clasz.fields ?? [];

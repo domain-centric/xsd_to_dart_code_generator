@@ -7,7 +7,7 @@ class MergeEqualClasses implements GeneratorStage {
   List<LibraryWithSource> generate(List<LibraryWithSource> libraries) {
     var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
-      var classes = (library.classes ?? []).cast<ClassToBePostProcessed>();
+      var classes = (library.classes ?? []).cast<ClassFromXsd>();
       var uniqueClasses = mergeEqualClasses(classes);
       var newLibrary = library.copyWith(classes: uniqueClasses);
       newLibraries.add(newLibrary);
@@ -15,10 +15,8 @@ class MergeEqualClasses implements GeneratorStage {
     return newLibraries;
   }
 
-  List<ClassToBePostProcessed> mergeEqualClasses(
-    List<ClassToBePostProcessed> classes,
-  ) {
-    Map<String, ClassToBePostProcessed> codeAndClassModels = {};
+  List<ClassFromXsd> mergeEqualClasses(List<ClassFromXsd> classes) {
+    Map<String, ClassFromXsd> codeAndClassModels = {};
 
     for (var clasz in classes) {
       var code = clasz.toString();
@@ -32,14 +30,14 @@ class MergeEqualClasses implements GeneratorStage {
     return codeAndClassModels.values.toList();
   }
 
-  ClassToBePostProcessed mergeClasses(
-    Map<String, ClassToBePostProcessed> codeAndClassModels,
+  ClassFromXsd mergeClasses(
+    Map<String, ClassFromXsd> codeAndClassModels,
     String code,
-    ClassToBePostProcessed clasz,
+    ClassFromXsd clasz,
   ) {
     var classModel = codeAndClassModels[code]!;
-    var xsdSources = classModel.xsdSources;
-    xsdSources.addAll(clasz.xsdSources);
+    var xsdSources = classModel.mappedXsdElements;
+    xsdSources.addAll(clasz.mappedXsdElements);
     var newClassModel = classModel.copyWith(xsdSources: xsdSources);
     return newClassModel;
   }

@@ -9,6 +9,7 @@ import 'package:plural_noun/plural_noun.dart';
 
 List<Field> generateFieldsFromXsdElement({
   required Schema schema,
+  required XsdNamePathToTypeNameMapping nameMapping,
   required String typeName,
   required XmlElement complexType,
 }) {
@@ -27,13 +28,13 @@ List<Field> generateFieldsFromXsdElement({
     if (isList) {
       name = name ?? 'items';
 
-      var genericType = XsdChoiceType(
+      var genericType = TypeFromXsdChoice(
         '${typeName}Item',
         nestedChoice,
         elementsThatImplementThisType,
       );
       return [
-        XsdElementField(
+        FieldFromXsdElement(
           name,
           xsdElement: nestedChoice,
           type: Type.ofList(genericType: genericType),
@@ -42,13 +43,13 @@ List<Field> generateFieldsFromXsdElement({
     } else {
       name = name ?? 'item';
 
-      var genericType = XsdChoiceType(
+      var genericType = TypeFromXsdChoice(
         '${typeName}Item',
         nestedChoice,
         elementsThatImplementThisType,
       );
       return [
-        XsdElementField(name, xsdElement: nestedChoice, type: genericType),
+        FieldFromXsdElement(name, xsdElement: nestedChoice, type: genericType),
       ];
     }
   }
@@ -62,7 +63,7 @@ List<Field> generateFieldsFromXsdElement({
 
   var fields = <Field>[];
   for (var fieldXsd in fieldXsds) {
-    var field = convertToField(schema, fieldXsd);
+    var field = convertToField(schema, nameMapping, fieldXsd);
     if (field != null) fields.add(field);
   }
 
@@ -109,10 +110,14 @@ XmlElement? findNestedElement(XmlElement element) {
   return null;
 }
 
-Field? convertToField(Schema schema, XmlElement xsd) {
+Field? convertToField(
+  Schema schema,
+  XsdNamePathToTypeNameMapping nameMapping,
+  XmlElement xsd,
+) {
   var xmlName = xsd.getAttribute("name")!;
   String fieldName = toValidDartNameStartingWitLowerCase(xmlName);
-  var type = createTypeForElement(schema, xsd);
+  var type = createTypeForElement(schema, nameMapping, xsd);
 
   if (type == null) {
     log.warning('Dart type could not be determined for: $xsd');
@@ -126,14 +131,14 @@ Field? convertToField(Schema schema, XmlElement xsd) {
   var doc = generateDartDocFromXsdElement(xsd);
   var isElement = xsd.name.local == 'element';
   if (isElement) {
-    return XsdElementField(
+    return FieldFromXsdElement(
       fieldName,
       type: type,
       xsdElement: xsd,
       docComments: doc ?? [],
     );
   }
-  return XsdAttributeField(
+  return FieldFromXsdAttribute(
     fieldName,
     type: type,
     xsdAttribute: xsd,
@@ -144,6 +149,7 @@ Field? convertToField(Schema schema, XmlElement xsd) {
 final extendedRules = EnglishPluralRuleSet().addIrregularNouns({
   'vars': 'vars',
   'var': 'vars',
+  'connection': 'connections',
 });
 
 final PluralEngine pluralEngine = PluralEngine(extendedRules);
@@ -164,12 +170,11 @@ List<String> splitCamelCase(String input) {
 }
 
 /// A [Field] that represents a XsdElement
-class XsdElementField extends Field {
+class FieldFromXsdElement extends Field {
   final XmlElement xsdElement;
 
-  XsdElementField(
+  FieldFromXsdElement(
     super.name, {
-
     super.docComments = const [],
     super.annotations = const [],
     super.static = false,
@@ -181,10 +186,10 @@ class XsdElementField extends Field {
 }
 
 /// A [Field] that represents a XsdAttribute
-class XsdAttributeField extends Field {
+class FieldFromXsdAttribute extends Field {
   final XmlElement xsdAttribute;
 
-  XsdAttributeField(
+  FieldFromXsdAttribute(
     super.name, {
 
     super.docComments = const [],
@@ -197,18 +202,19 @@ class XsdAttributeField extends Field {
   });
 }
 
-Type? createTypeForElement(Schema schema, XmlElement xsd) {
+Type? createTypeForElement(
+  Schema schema,
+  XsdNamePathToTypeNameMapping nameMapping,
+  XmlElement xsd,
+) {
   Type? type;
   type = createFromTypeAttribute(schema, xsd);
   if (type != null) {
     return type;
   }
 
-  type = createFromNameAttribute(schema, xsd);
-  if (type != null) {
-    return type;
-  }
-  return null;
+  type = createFromNameAttribute(schema, nameMapping, xsd);
+  return type;
 }
 
 /// A reference to another (to be) generated class or generated enum
@@ -274,11 +280,16 @@ Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
   }
 }
 
-Type? createFromNameAttribute(Schema schema, XmlElement xsd) {
-  var name = xsd.getAttribute("name");
-  if (name == null) {
-    return null;
-  }
+Type? createFromNameAttribute(
+  Schema schema,
+  XsdNamePathToTypeNameMapping nameMapping,
+  XmlElement xsd,
+) {
+  var name = findTypeName(xsd, nameMapping);
+  //var name = xsd.getAttribute("name");
+  // if (name == null) {
+  //   return null;
+  // }
   var isNullable = _isNullable(xsd);
   var isList = _isList(xsd);
 
@@ -306,10 +317,14 @@ bool _isNullable(XmlElement element) {
       element.getAttribute("use") == "optional";
 }
 
-class XsdChoiceType extends Type {
+class TypeFromXsdChoice extends Type {
   final XmlElement xsdSource;
   final List<XmlElement> elementsThatImplementThisType;
-  XsdChoiceType(super.name, this.xsdSource, this.elementsThatImplementThisType);
+  TypeFromXsdChoice(
+    super.name,
+    this.xsdSource,
+    this.elementsThatImplementThisType,
+  );
 }
 
 /// finds within [parent] all xds.elements, including xsd.group references

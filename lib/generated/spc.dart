@@ -191,15 +191,15 @@ class IndexRange {
 }
 
 class EnumTypeSpec extends TypeSpecBase {
-  final List<Enumerator> enumerators;
+  final List<EnumeratorWithoutValue> enumerators;
   final AddData addData;
   EnumTypeSpec({required this.enumerators, required this.addData});
 }
 
-class Enumerator {
+class EnumeratorWithoutValue {
   final TextBase documentation;
   final String name;
-  Enumerator({required this.documentation, required this.name});
+  EnumeratorWithoutValue({required this.documentation, required this.name});
 }
 
 class EnumTypeWithNamedValueSpec extends TypeSpecBase {
@@ -254,9 +254,9 @@ class ParameterSet {
   ParameterSet({required this.items});
 }
 
-class Variable extends VariableDecl {
+class ParameterInoutVariable extends VariableDecl {
   final int orderWithinParamSet;
-  Variable({
+  ParameterInoutVariable({
     required super.initialValue,
     required super.address,
     required super.type,
@@ -267,10 +267,10 @@ class Variable extends VariableDecl {
   });
 }
 
-class Variable extends VariableDecl {
+class ParameterInputVariable extends VariableDecl {
   final int orderWithinParamSet;
   final EdgeModifierType edgeDetection;
-  Variable({
+  ParameterInputVariable({
     required super.initialValue,
     required super.address,
     required super.type,
@@ -279,6 +279,19 @@ class Variable extends VariableDecl {
     required super.addData,
     required this.orderWithinParamSet,
     required this.edgeDetection,
+  });
+}
+
+class ParameterOutputVariable extends VariableDecl {
+  final int orderWithinParamSet;
+  ParameterOutputVariable({
+    required super.initialValue,
+    required super.address,
+    required super.type,
+    super.usingDirectives,
+    required super.documentation,
+    required super.addData,
+    required this.orderWithinParamSet,
   });
 }
 
@@ -367,18 +380,18 @@ class Value {
 }
 
 class ArrayValue {
-  final Value value;
+  final ArrayValueItem value;
   ArrayValue({required this.value});
 }
 
-class Value extends Value {
+class ArrayValueItem extends Value {
   final String? repetitionValue;
-  Value({required super.item, this.repetitionValue});
+  ArrayValueItem({required super.item, this.repetitionValue});
 }
 
-class Value extends Value {
+class StructValueItem extends Value {
   final String member;
-  Value({required super.item, required this.member});
+  StructValueItem({required super.item, required this.member});
 }
 
 class AddressExpression extends FixedAddressExpression {
@@ -555,11 +568,11 @@ class Contact extends LdObjectBase {
 }
 
 class ConnectionPointIn extends IdentifiedObjectBase {
-  final List<Connection>? connectia;
+  final List<Connection>? connections;
   ConnectionPointIn({
     required super.documentation,
     required super.addData,
-    this.connectia,
+    this.connections,
   });
 }
 
@@ -594,7 +607,7 @@ class AddData {
 
 class Data {
   final String name;
-  final handleUnknown handleUnknown;
+  final HandleUnknown handleUnknown;
   Data({required this.name, required this.handleUnknown});
 }
 
@@ -782,7 +795,7 @@ class Content extends TextBase {
 }
 
 /// Common interface for: NamespaceDecl, DataTypeDecl, Program, FunctionBlock, Function
-abstract class GlobalNamespaceItem {}
+abstract interface class GlobalNamespaceItem {}
 
 class Program extends NamespaceContentBase implements GlobalNamespaceItem {
   final List<ExternalVarList>? externalVars;
@@ -800,7 +813,7 @@ class Program extends NamespaceContentBase implements GlobalNamespaceItem {
 }
 
 /// Common interface for: NamespaceDecl, DataTypeDecl, FunctionBlock, Function
-abstract class NamespaceDeclItem {}
+abstract interface class NamespaceDeclItem {}
 
 class FunctionBlock extends NamespaceContentBase implements NamespaceDeclItem {
   final ParameterSet parameters;
@@ -832,29 +845,29 @@ class NamespaceDecl extends NamespaceContentBase
 }
 
 /// Common interface for: InoutVars, InputVars, OutputVars
-abstract class ParameterSetItem {}
+abstract interface class ParameterSetItem {}
 
 class InoutVars implements ParameterSetItem {
-  final List<Variable>? variables;
+  final List<ParameterInoutVariable>? variables;
   InoutVars({this.variables});
 }
 
 class InputVars implements ParameterSetItem {
-  final List<Variable>? variables;
+  final List<ParameterInputVariable>? variables;
   final bool? retain;
   final bool? non_retain;
   InputVars({this.variables, this.retain, this.non_retain});
 }
 
 class OutputVars implements ParameterSetItem {
-  final List<Variable>? variables;
+  final List<ParameterOutputVariable>? variables;
   final bool? retain;
   final bool? non_retain;
   OutputVars({this.variables, this.retain, this.non_retain});
 }
 
 /// Common interface for: TypeName, InstantlyDefinedType
-abstract class TypeRefItem {}
+abstract interface class TypeRefItem {}
 
 class InstantlyDefinedType extends InstantlyDefinableTypeSpecBase
     implements TypeRefItem {
@@ -862,7 +875,7 @@ class InstantlyDefinedType extends InstantlyDefinableTypeSpecBase
 }
 
 /// Common interface for: SimpleValue, ArrayValue, StructValue
-abstract class ValueItem {}
+abstract interface class ValueItem {}
 
 class SimpleValue implements ValueItem {
   final String? value;
@@ -870,12 +883,12 @@ class SimpleValue implements ValueItem {
 }
 
 class StructValue implements ValueItem {
-  final Value value;
+  final StructValueItem value;
   StructValue({required this.value});
 }
 
 /// Common interface for: CommonObject, LdObject, FbdObject
-abstract class LadderRungItem {}
+abstract interface class LadderRungItem {}
 
 enum ElementaryType { dINT }
 

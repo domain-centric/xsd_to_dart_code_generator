@@ -18,19 +18,21 @@ class AddClassesForMappedElements implements GeneratorStage {
     var newLibraries = <LibraryWithSource>[];
     for (var library in libraries) {
       var classes = library.classes ?? [];
-      List<ClassToBePostProcessed> newClasses =
-          generateClassesForMappedElements(classes, library);
+      List<ClassFromXsd> newClasses = generateClassesForMappedElements(
+        classes,
+        library,
+      );
       var newLibrary = library.copyWith(classes: [...classes, ...newClasses]);
       newLibraries.add(newLibrary);
     }
     return newLibraries;
   }
 
-  List<ClassToBePostProcessed> generateClassesForMappedElements(
+  List<ClassFromXsd> generateClassesForMappedElements(
     List<Class> classes,
     LibraryWithSource library,
   ) {
-    var newClasses = <ClassToBePostProcessed>[];
+    var newClasses = <ClassFromXsd>[];
     for (var clasz in classes) {
       var fields = clasz.fields ?? [];
       for (var field in fields) {
@@ -67,29 +69,23 @@ class AddClassesForMappedElements implements GeneratorStage {
   bool isSimpleType(String typeName) =>
       convertXsdTypeToDartType(typeName, isNullable: false) != null;
 
-  ClassToBePostProcessed createMappedClass(
-    Schema schema,
-    XmlElement xsdElement,
-  ) {
+  ClassFromXsd createMappedClass(Schema schema, XmlElement xsdElement) {
     var className = toValidDartNameStartingWitUpperCase(
       xsdElement.getAttribute('name'),
     );
     var superClass = XsdReferenceType.fromXsdElement(schema, xsdElement);
-    return ClassToBePostProcessed(
+    return ClassFromXsd(
       className,
-      xsdSources: [xsdElement],
+      mappedXsdElements: [xsdElement],
       superClass: superClass,
     );
   }
 
-  bool isChoiceField(Field field) => field.type is XsdChoiceType;
+  bool isChoiceField(Field field) => field.type is TypeFromXsdChoice;
 
-  List<ClassToBePostProcessed> createChoiceMappedClasses(
-    Schema schema,
-    Field field,
-  ) {
-    var classes = <ClassToBePostProcessed>[];
-    var choice = field.type as XsdChoiceType;
+  List<ClassFromXsd> createChoiceMappedClasses(Schema schema, Field field) {
+    var classes = <ClassFromXsd>[];
+    var choice = field.type as TypeFromXsdChoice;
     var elements = choice.elementsThatImplementThisType;
     for (var element in elements) {
       if (isMapped(element)) {
@@ -100,10 +96,10 @@ class AddClassesForMappedElements implements GeneratorStage {
   }
 
   XmlElement? findElement(Field field) {
-    if (field is XsdElementField) {
+    if (field is FieldFromXsdElement) {
       return field.xsdElement;
     }
-    if (field is XsdAttributeField) {
+    if (field is FieldFromXsdAttribute) {
       return field.xsdAttribute;
     }
     return null;
