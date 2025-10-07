@@ -7,7 +7,6 @@ import 'package:xsd_to_dart_code_generator/generate/generator/add_classes_from_c
 import 'package:xsd_to_dart_code_generator/generate/generator/add_types_from_simple_types.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/add_constructors.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/add_library_for_each_xsd_file.dart';
-import 'package:xsd_to_dart_code_generator/generate/generator/add_classes_for_mapped_elements.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/check_unique_names.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/merge_equal_classes.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/write_result_to_file.dart';
@@ -30,7 +29,6 @@ class CodeGenerator extends DelegatingList<GeneratorStage>
          AddLibraryForEachXsdFile(xsdDirectory),
          AddClassesFromComplexTypes(nameMapping),
          AddTypesFromSimpleTypes(nameMapping),
-         AddClassesForMappedElements(),
          AddChoiceInterfaces(nameMapping),
          MergeEqualClasses(),
          CheckIfLibraryMemberNamesAreUnique(),
