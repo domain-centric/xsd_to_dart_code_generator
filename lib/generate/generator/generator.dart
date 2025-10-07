@@ -8,7 +8,6 @@ import 'package:xsd_to_dart_code_generator/generate/generator/add_types_from_sim
 import 'package:xsd_to_dart_code_generator/generate/generator/add_constructors.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/add_library_for_each_xsd_file.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/add_classes_for_mapped_elements.dart';
-import 'package:xsd_to_dart_code_generator/generate/generator/log_result.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/check_unique_names.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/merge_equal_classes.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/write_result_to_file.dart';
