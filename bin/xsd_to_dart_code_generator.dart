@@ -14,6 +14,7 @@ void main(List<String> arguments) {
       'IEC61131_10_Ed1_0_SmcExt1_0_Spc1_0': 'sysmac_extension',
     },
   );
+  //FIXME can ew do without?
   var nameMapping = <String, String>{
     'EnumTypeSpec.Enumerator': 'EnumeratorWithoutValue',
     'ParameterSet.InoutVars.Variable': 'ParameterInoutVariable',

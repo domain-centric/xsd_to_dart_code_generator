@@ -82,7 +82,7 @@ class InterfaceFromXsdChoice extends ClassFromXsd {
 
   factory InterfaceFromXsdChoice(TypeFromXsdChoice xsdChoiceType) {
     var owners = xsdChoiceType.elementsThatImplementThisType.map(
-      (c) => c.getAttribute('name'),
+      (c) => '[${c.getAttribute('name')}]',
     );
     var docComments = [
       DocComment.fromString('Common interface for: ${owners.join(', ')}'),

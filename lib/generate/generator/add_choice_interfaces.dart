@@ -55,26 +55,6 @@ class AddChoiceInterfaces implements GeneratorStage {
     return xsdChoiceTypes;
   }
 
-  // void letClassesImplementIfNeeded(
-  //   List<Class> classes,
-  //   TypeFromXsdChoice xsdChoiceType,
-  // ) {
-  //   for (var clasz in classes) {
-  //     if (clasz.name.toString() == 'ArrayValue') {
-  //       print('!!!');
-  //     }
-  //     if (clasz.name.toString() == 'ArrayValue' &&
-  //         xsdChoiceType.name == 'Value') {
-  //       print('!!!');
-  //     }
-  //     if (findTypesToImplement(clasz, xsdChoiceType)) {
-  //       classes.remove(clasz);
-  //       var classThatImplements = letClassImplement(clasz, xsdChoiceType);
-  //       classes.add(classThatImplements);
-  //     }
-  //   }
-  // }
-
   List<TypeFromXsdChoice> findTypesToImplement(
     Class clasz,
     List<TypeFromXsdChoice> xsdChoiceTypes,

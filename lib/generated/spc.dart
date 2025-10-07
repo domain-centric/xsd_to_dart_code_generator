@@ -1,19 +1,19 @@
-/// Common interface for: NamespaceDecl, DataTypeDecl, Program, FunctionBlock, Function
+/// Common interface for: [NamespaceDecl], [DataTypeDecl], [Program], [FunctionBlock], [Function]
 abstract interface class GlobalNamespaceItem {}
 
-/// Common interface for: NamespaceDecl, DataTypeDecl, FunctionBlock, Function
+/// Common interface for: [NamespaceDecl], [DataTypeDecl], [FunctionBlock], [Function]
 abstract interface class NamespaceDeclItem {}
 
-/// Common interface for: InoutVars, InputVars, OutputVars
+/// Common interface for: [InoutVars], [InputVars], [OutputVars]
 abstract interface class ParameterSetItem {}
 
-/// Common interface for: TypeName, InstantlyDefinedType
+/// Common interface for: [TypeName], [InstantlyDefinedType]
 abstract interface class TypeRef {}
 
-/// Common interface for: SimpleValue, ArrayValue, StructValue
+/// Common interface for: [SimpleValue], [ArrayValue], [StructValue]
 abstract interface class Value {}
 
-/// Common interface for: CommonObject, LdObject, FbdObject
+/// Common interface for: [CommonObject], [LdObject], [FbdObject]
 abstract interface class LadderRungItem {}
 
 class Project {
