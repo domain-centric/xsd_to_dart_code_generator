@@ -1,21 +1,3 @@
-/// Common interface for: NamespaceDecl, DataTypeDecl, Program, FunctionBlock, Function
-abstract interface class GlobalNamespaceItem {}
-
-/// Common interface for: NamespaceDecl, DataTypeDecl, FunctionBlock, Function
-abstract interface class NamespaceDeclItem {}
-
-/// Common interface for: InoutVars, InputVars, OutputVars
-abstract interface class ParameterSetItem {}
-
-/// Common interface for: TypeName, InstantlyDefinedType
-abstract interface class TypeRef {}
-
-/// Common interface for: SimpleValue, ArrayValue, StructValue
-abstract interface class Value {}
-
-/// Common interface for: CommonObject, LdObject, FbdObject
-abstract interface class LadderRungItem {}
-
 class Project {
   final FileHeader fileHeader;
   final ContentHeader contentHeader;
@@ -175,18 +157,6 @@ abstract class NamespaceContentBase extends TextualObjectBase {
   });
 }
 
-class NamespaceDecl extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
-  final List<NamespaceDeclItem> items;
-  NamespaceDecl({
-    required super.name,
-    super.usingDirectives,
-    required super.documentation,
-    required super.addData,
-    required this.items,
-  });
-}
-
 class UserDefinedTypeDecl extends NamespaceContentBase {
   final TypeSpecBase userDefinedTypeSpec;
   UserDefinedTypeDecl({
@@ -260,41 +230,7 @@ class StructTypeSpec extends TypeSpecBase {
   StructTypeSpec({required this.members, required this.addData});
 }
 
-class Program extends NamespaceContentBase implements GlobalNamespaceItem {
-  final List<ExternalVarList>? externalVars;
-  final List<VarListWithAccessSpec>? vars;
-  final Body mainBody;
-  Program({
-    required super.name,
-    super.usingDirectives,
-    required super.documentation,
-    required super.addData,
-    this.externalVars,
-    this.vars,
-    required this.mainBody,
-  });
-}
-
-class FunctionBlock extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
-  final ParameterSet parameters;
-  final List<ExternalVarList>? externalVars;
-  final List<VarListWithAccessSpec>? vars;
-  final Body mainBody;
-  FunctionBlock({
-    required super.name,
-    super.usingDirectives,
-    required super.documentation,
-    required super.addData,
-    required this.parameters,
-    this.externalVars,
-    this.vars,
-    required this.mainBody,
-  });
-}
-
-class Function$ extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
+class Function$ extends NamespaceContentBase {
   final TypeRef resultType;
   final ParameterSet parameters;
   final List<ExternalVarList>? externalVars;
@@ -318,11 +254,6 @@ class ParameterSet {
   ParameterSet({required this.items});
 }
 
-class InoutVars implements ParameterSetItem {
-  final List<ParameterInoutVariable>? variables;
-  InoutVars({this.variables});
-}
-
 class ParameterInoutVariable extends VariableDecl {
   final int orderWithinParamSet;
   ParameterInoutVariable({
@@ -334,13 +265,6 @@ class ParameterInoutVariable extends VariableDecl {
     required super.addData,
     required this.orderWithinParamSet,
   });
-}
-
-class InputVars implements ParameterSetItem {
-  final List<ParameterInputVariable>? variables;
-  final bool? retain;
-  final bool? non_retain;
-  InputVars({this.variables, this.retain, this.non_retain});
 }
 
 class ParameterInputVariable extends VariableDecl {
@@ -356,13 +280,6 @@ class ParameterInputVariable extends VariableDecl {
     required this.orderWithinParamSet,
     required this.edgeDetection,
   });
-}
-
-class OutputVars implements ParameterSetItem {
-  final List<ParameterOutputVariable>? variables;
-  final bool? retain;
-  final bool? non_retain;
-  OutputVars({this.variables, this.retain, this.non_retain});
 }
 
 class ParameterOutputVariable extends VariableDecl {
@@ -452,13 +369,21 @@ class VariableDeclPlain extends TextualObjectBase {
   });
 }
 
-class SimpleValue implements Value {
+class TypeRef {
+  TypeRef();
+}
+
+class Value { 
+  Value();
+}
+
+class SimpleValue { THIS SHOULD IMPLEMET VALUE!!!
   final String? value;
   SimpleValue({this.value});
 }
 
-class ArrayValue implements Value {
-  final ArrayValueItem value;
+class ArrayValue {
+  final ArrayValueItem value; THIS SHOULD BE A LIST OF ArrayValueItem
   ArrayValue({required this.value});
 }
 
@@ -467,8 +392,8 @@ class ArrayValueItem extends Value {
   ArrayValueItem({this.repetitionValue});
 }
 
-class StructValue implements Value {
-  final StructValueItem value;
+class StructValue { THIS SHOULD IMPLEMET VALUE!!!
+  final StructValueItem value;  THIS SHOULD BE A LIST OF StructValueItem
   StructValue({required this.value});
 }
 
@@ -724,7 +649,13 @@ class BaseType extends TypeRef {
 }
 
 class BaseType extends ElementaryType {
-  BaseType();
+  BaseType({
+    required super.fileHeader,
+    required super.contentHeader,
+    required super.types,
+    required super.instances,
+    required super.schemaVersion,
+  });
 }
 
 class Member extends VariableDecl {
@@ -793,11 +724,23 @@ class MainBody extends BodyWithoutSFC {
 }
 
 class EdgeDetection extends EdgeModifierType {
-  EdgeDetection();
+  EdgeDetection({
+    required super.fileHeader,
+    required super.contentHeader,
+    required super.types,
+    required super.instances,
+    required super.schemaVersion,
+  });
 }
 
 class AccessSpecifier extends AccessSpecifiers {
-  AccessSpecifier();
+  AccessSpecifier({
+    required super.fileHeader,
+    required super.contentHeader,
+    required super.types,
+    required super.instances,
+    required super.schemaVersion,
+  });
 }
 
 class BodyContent extends BehaviorRepresentationBase {
@@ -858,6 +801,81 @@ class Rung extends LadderRung {
 class Content extends TextBase {
   Content();
 }
+
+/// Common interface for: NamespaceDecl, DataTypeDecl, Program, FunctionBlock, Function
+abstract interface class GlobalNamespaceItem {}
+
+class Program extends NamespaceContentBase implements GlobalNamespaceItem {
+  final List<ExternalVarList>? externalVars;
+  final List<VarListWithAccessSpec>? vars;
+  final Body mainBody;
+  Program({
+    required super.name,
+    super.usingDirectives,
+    required super.documentation,
+    required super.addData,
+    this.externalVars,
+    this.vars,
+    required this.mainBody,
+  });
+}
+
+/// Common interface for: NamespaceDecl, DataTypeDecl, FunctionBlock, Function
+abstract interface class NamespaceDeclItem {}
+
+class FunctionBlock extends NamespaceContentBase implements NamespaceDeclItem {
+  final ParameterSet parameters;
+  final List<ExternalVarList>? externalVars;
+  final List<VarListWithAccessSpec>? vars;
+  final Body mainBody;
+  FunctionBlock({
+    required super.name,
+    super.usingDirectives,
+    required super.documentation,
+    required super.addData,
+    required this.parameters,
+    this.externalVars,
+    this.vars,
+    required this.mainBody,
+  });
+}
+
+class NamespaceDecl extends NamespaceContentBase
+    implements GlobalNamespaceItem, NamespaceDeclItem {
+  final List<NamespaceDeclItem> items;
+  NamespaceDecl({
+    required super.name,
+    super.usingDirectives,
+    required super.documentation,
+    required super.addData,
+    required this.items,
+  });
+}
+
+/// Common interface for: InoutVars, InputVars, OutputVars
+abstract interface class ParameterSetItem {}
+
+class InoutVars implements ParameterSetItem {
+  final List<ParameterInoutVariable>? variables;
+  InoutVars({this.variables});
+}
+
+class InputVars implements ParameterSetItem {
+  final List<ParameterInputVariable>? variables;
+  final bool? retain;
+  final bool? non_retain;
+  InputVars({this.variables, this.retain, this.non_retain});
+}
+
+class OutputVars implements ParameterSetItem {
+  final List<ParameterOutputVariable>? variables;
+  final bool? retain;
+  final bool? non_retain;
+  OutputVars({this.variables, this.retain, this.non_retain});
+}
+
+/// Common interface for: CommonObject, LdObject, FbdObject
+abstract interface class LadderRungItem {}
 
 enum ElementaryType { dINT }
 

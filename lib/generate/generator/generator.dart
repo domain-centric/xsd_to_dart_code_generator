@@ -32,7 +32,7 @@ class CodeGenerator extends DelegatingList<GeneratorStage>
          AddClassesFromComplexTypes(nameMapping),
          AddTypesFromSimpleTypes(nameMapping),
          AddClassesForMappedElements(),
-         AddChoiceInterfaces(),
+         AddChoiceInterfaces(nameMapping),
          MergeEqualClasses(),
          CheckIfLibraryMemberNamesAreUnique(),
          AddConstructors(),

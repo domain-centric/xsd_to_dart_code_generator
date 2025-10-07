@@ -80,6 +80,15 @@ ClassFromXsd? generateClassFromComplexType(
 
   var superClass = findSuperClass(schema: schema, complexType: complexType);
 
+  var interfaceFromXsdChoice = createInterfaceFromXsdChoice(
+    schema,
+    typeName,
+    complexType,
+  );
+  if (interfaceFromXsdChoice != null) {
+    return interfaceFromXsdChoice;
+  }
+
   List<Field> fields = generateFieldsFromXsdElement(
     schema: schema,
     nameMapping: nameMapping,
@@ -94,6 +103,29 @@ ClassFromXsd? generateClassFromComplexType(
     fields: fields,
     superClass: superClass,
   );
+}
+
+InterfaceFromXsdChoice? createInterfaceFromXsdChoice(
+  Schema schema,
+  String typeName,
+  XmlElement complexType,
+) {
+  var nestedElements = findNestedElements([complexType]);
+  var nestedChoice = findNestedChoiceElement(nestedElements);
+
+  if (nestedChoice == null || isList(nestedChoice)) {
+    return null;
+  }
+  List<XmlElement> elementsThatImplementThisType = findElements(
+    schema,
+    nestedChoice,
+  );
+  var typeFromXsdChoice = TypeFromXsdChoice(
+    typeName,
+    nestedChoice,
+    elementsThatImplementThisType,
+  );
+  return InterfaceFromXsdChoice(typeFromXsdChoice);
 }
 
 ClassModifier? _classModifier(XmlElement complexType) =>

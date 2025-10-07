@@ -1,5 +1,6 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
+import 'package:xsd_to_dart_code_generator/generate/dart_code/field_generator.dart';
 import 'package:xsd_to_dart_code_generator/generate/generator/check_unique_names.dart';
 
 /// This class is a placeholder for a class that needs to be post-processed
@@ -69,16 +70,28 @@ class ClassFromXsd extends Class implements HasMappedXsdElements {
   int get hashCode => Object.hash(name, mappedXsdElements);
 }
 
-// class ClassThatNeedsNoConstructor extends ClassFromXsd {
-//   ClassThatNeedsNoConstructor(
-//     super.name, {
-//     super.docComments,
-//     super.annotations,
-//     super.abstract,
-//     super.implements,
-//     super.mixins,
-//     super.fields,
-//     super.methods,
-//     required super.mappedXsdElements,
-//   });
-// }
+class InterfaceFromXsdChoice extends ClassFromXsd {
+  final TypeFromXsdChoice typeFromXsdChoice;
+
+  InterfaceFromXsdChoice._(
+    super.name, {
+    super.docComments,
+    required super.mappedXsdElements,
+    required this.typeFromXsdChoice,
+  }) : super(modifier: ClassModifier.abstract_interface);
+
+  factory InterfaceFromXsdChoice(TypeFromXsdChoice xsdChoiceType) {
+    var owners = xsdChoiceType.elementsThatImplementThisType.map(
+      (c) => c.getAttribute('name'),
+    );
+    var docComments = [
+      DocComment.fromString('Common interface for: ${owners.join(', ')}'),
+    ];
+    return InterfaceFromXsdChoice._(
+      xsdChoiceType.name,
+      mappedXsdElements: [xsdChoiceType.xsdSource],
+      typeFromXsdChoice: xsdChoiceType,
+      docComments: docComments,
+    );
+  }
+}

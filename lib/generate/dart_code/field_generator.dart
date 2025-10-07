@@ -18,14 +18,14 @@ List<Field> generateFieldsFromXsdElement({
   var nestedChoice = findNestedChoiceElement(nestedElements);
   if (nestedChoice != null) {
     var name = nestedChoice.getAttribute('name');
-    var isList = _isList(nestedChoice);
+    var isAList = isList(nestedChoice);
 
     /// create a generic type (an interface) for all generated classes inside choice implement later
     List<XmlElement> elementsThatImplementThisType = findElements(
       schema,
       nestedChoice,
     );
-    if (isList) {
+    if (isAList) {
       name = name ?? 'items';
 
       var genericType = TypeFromXsdChoice(
@@ -41,16 +41,9 @@ List<Field> generateFieldsFromXsdElement({
         ),
       ];
     } else {
-      name = name ?? 'item';
-
-      var genericType = TypeFromXsdChoice(
-        '${typeName}Item',
-        nestedChoice,
-        elementsThatImplementThisType,
-      );
-      return [
-        FieldFromXsdElement(name, xsdElement: nestedChoice, type: genericType),
-      ];
+      // [AddClassesFromComplexTypes.generate] will create
+      // an InterfaceFromXsdChoice without fields
+      return [];
     }
   }
 
@@ -252,7 +245,7 @@ Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
     return null;
   }
   var isNullable = _isNullable(xsd);
-  var isList = _isList(xsd);
+  var isAList = isList(xsd);
 
   var xsdNameSpacePrefix = xsd.name.prefix!;
 
@@ -262,7 +255,7 @@ Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
       isNullable: isNullable,
     );
     if (type != null) {
-      if (isList) {
+      if (isAList) {
         return Type.ofList(genericType: type, nullable: isNullable);
       } else {
         return type;
@@ -273,7 +266,7 @@ Type? createFromTypeAttribute(Schema schema, XmlElement xsd) {
   // assume it is a reference to another generated class or generated enum
   var type = XsdReferenceType.fromXsdElement(schema, xsd);
 
-  if (isList) {
+  if (isAList) {
     return Type.ofList(genericType: type, nullable: isNullable);
   } else {
     return type;
@@ -286,26 +279,22 @@ Type? createFromNameAttribute(
   XmlElement xsd,
 ) {
   var name = findTypeName(xsd, nameMapping);
-  //var name = xsd.getAttribute("name");
-  // if (name == null) {
-  //   return null;
-  // }
   var isNullable = _isNullable(xsd);
-  var isList = _isList(xsd);
+  var isAList = isList(xsd);
 
   var type = XsdReferenceType(
     name,
     xsdElement: xsd,
     xsdNamespaceUri: 'TODO',
   ); //TODO:
-  if (isList) {
+  if (isAList) {
     return Type.ofList(genericType: type, nullable: isNullable);
   } else {
     return type;
   }
 }
 
-_isList(XmlElement element) =>
+bool isList(XmlElement element) =>
     element.getAttribute("maxOccurs") == "unbounded" ||
     (element.getAttribute("maxOccurs") != null &&
         int.tryParse(element.getAttribute("maxOccurs")!) != null &&
