@@ -10,7 +10,7 @@ abstract interface class ParameterSetItem {}
 /// Common interface for: TypeName, InstantlyDefinedType
 abstract interface class TypeRef {}
 
-/// Common interface for: [SimpleValue], [ArrayValue], [StructValue]
+/// Common interface for: SimpleValue, ArrayValue, StructValue
 abstract interface class Value {}
 
 /// Common interface for: CommonObject, LdObject, FbdObject
@@ -339,8 +339,8 @@ class ParameterInoutVariable extends VariableDecl {
 class InputVars implements ParameterSetItem {
   final List<ParameterInputVariable>? variables;
   final bool? retain;
-  final bool? non_retain;
-  InputVars({this.variables, this.retain, this.non_retain});
+  final bool? nonRetain;
+  InputVars({this.variables, this.retain, this.nonRetain});
 }
 
 class ParameterInputVariable extends VariableDecl {
@@ -361,8 +361,8 @@ class ParameterInputVariable extends VariableDecl {
 class OutputVars implements ParameterSetItem {
   final List<ParameterOutputVariable>? variables;
   final bool? retain;
-  final bool? non_retain;
-  OutputVars({this.variables, this.retain, this.non_retain});
+  final bool? nonRetain;
+  OutputVars({this.variables, this.retain, this.nonRetain});
 }
 
 class ParameterOutputVariable extends VariableDecl {
@@ -497,8 +497,8 @@ class FixedAddressExpression extends TextualObjectBase {
 }
 
 class ST extends ProgrammingLanguageBase {
-  final String sT;
-  ST({required this.sT});
+  final String st;
+  ST({required this.st});
 }
 
 class LD extends ProgrammingLanguageBase {
@@ -702,7 +702,7 @@ class SimpleText extends TextBase {
   SimpleText();
 }
 
-enum ElementaryType { dINT }
+enum ElementaryType { dint }
 
 enum AccessSpecifiers { private }
 

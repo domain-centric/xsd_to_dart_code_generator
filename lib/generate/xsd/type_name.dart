@@ -45,7 +45,7 @@ String toValidDartNameStartingWitLowerCase(String? name) {
     throw ArgumentError("Name cannot be null");
   }
 
-  var candidate = name.toLowerFirstCase().replaceAll(
+  var candidate = name.toCamelCase().toLowerFirstCase().replaceAll(
     _notLettersNumbersUnderscoreOrDollar,
     '',
   );
